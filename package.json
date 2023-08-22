@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@docker/extension-api-client": "^0.3.4"
+  },
+  "devDependencies": {
+    "@docker/extension-api-client-types": "^0.3.4"
+  }
+}
