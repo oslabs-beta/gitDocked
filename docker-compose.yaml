@@ -1,3 +1,10 @@
 services:
-  my-extension:
+  GitDocked:
     image: ${DESKTOP_PLUGIN_IMAGE}
+    container_name: gitdocked
+    volumes:
+    - user:/backend/user
+    - /var/run/docker.sock.raw:/var/run/docker.sock
+
+volumes:
+  user:

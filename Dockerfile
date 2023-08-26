@@ -1,8 +1,38 @@
 
+# FROM ubuntu
+# ARG UID
+# ARG GID
 
+# # Update the package list, install sudo, create a non-root user, and grant password-less sudo permissions
+# RUN apt update && \
+#     apt install -y sudo && \
+#     addgroup --gid $GID nonroot && \
+#     adduser --uid $UID --gid $GID --disabled-password --gecos "" nonroot && \
+#     echo 'nonroot ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# # Set the non-root user as the default user
+# USER nonroot
+# # Set the working directory
+# WORKDIR /home/nonroot/app
+
+# # Get your host's UID and GID
+# export HOST_UID=$(id -u)
+# export HOST_GID=$(id -g)
+
+# # Build the Docker image
+# docker build --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -t your-image-name .
+
+# # Run the Docker container
+# docker run -it --rm --name your-container-name your-image-name id
+
+# Copy files into the container and set the appropriate permissions
+# COPY --chown=nonroot:nonroot . /home/nonroot/app
+# RUN chmod -R 755 /home/nonroot/app
+
+# build backend service first
 FROM --platform=$BUILDPLATFORM node:19.6-alpine3.16 AS builder
 WORKDIR /backend
-COPY vm/package*.json .
+COPY backend/package*.json .
 RUN --mount=type=cache,target=/user/src/app/.npm \
     npm set cache /usr/src/app/.npm && \ 
     npm ci
@@ -42,8 +72,8 @@ COPY --from=builder /backend backend
 COPY --from=client-builder /ui/build ui
 
 # Copy user directory and static directory into the extension image
-COPY vm/static static
-COPY vm/user user
+# COPY backend/static static
+# COPY backend/user user
 
 RUN chmod +x /backend
 WORKDIR /backend
