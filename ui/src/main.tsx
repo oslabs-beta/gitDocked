@@ -12,9 +12,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       the `dockerDesktopTheme` class to your root <html> element to get
       some minimal Docker theming.
     */}
-    <DockerMuiThemeProvider>
-      <CssBaseline />
+    {/* <DockerMuiThemeProvider>
+      <CssBaseline /> */}
       <App />
-    </DockerMuiThemeProvider>
+    {/* </DockerMuiThemeProvider> */}
   </React.StrictMode>
 );
+
