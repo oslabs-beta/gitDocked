@@ -30,13 +30,13 @@ You can use `docker` to build, install and push your extension. Also, we provide
 To build the extension, use `make build-extension` **or**:
 
 ```shell
-  docker buildx build -t mccormsy/gitDocked:latest . --load
+  docker buildx build -t mccormsy/gitdocked:latest . --load
 ```
 
 To install the extension, use `make install-extension` **or**:
 
 ```shell
-  docker extension install mccormsy/gitDocked:latest
+  docker extension install mccormsy/gitdocked:latest
 ```
 
 > If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.
@@ -71,7 +71,7 @@ In order to open the Chrome Dev Tools for your extension when you click on the e
 Each subsequent click on the extension tab will also open Chrome Dev Tools. To stop this behaviour, run:
 
 ```shell
-  docker extension dev reset mccormsy/gitDocked:latest
+  docker extension dev reset mccormsy/gitdocked:latest
 ```
 
 ### Backend development (optional)
@@ -83,8 +83,9 @@ Note that an extension doesn't necessarily need a backend container, but in this
 Whenever you make changes in the [backend](./backend) source code, you will need to compile them and re-deploy a new version of your backend container.
 Use the `docker extension update` command to remove and re-install the extension automatically:
 
+MAKE SURE TO RE-BUILD YOUR IMAGE FIRST
 ```shell
-docker extension update mccormsy/gitDocked:latest
+docker extension update mccormsy/gitdocked:latest
 ```
 
 > If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.
@@ -96,7 +97,7 @@ docker extension update mccormsy/gitDocked:latest
 To remove the extension:
 
 ```shell
-docker extension rm mccormsy/gitDocked:latest
+docker extension rm mccormsy/gitdocked:latest
 ```
 
 ## What's next?

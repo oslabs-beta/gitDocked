@@ -1,4 +1,4 @@
-IMAGE?=mccormsy/gitDocked
+IMAGE?=mccormsy/gitdocked
 TAG?=latest
 
 BUILDER=buildx-multi-arch
