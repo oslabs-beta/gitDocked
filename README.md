@@ -83,8 +83,9 @@ Note that an extension doesn't necessarily need a backend container, but in this
 Whenever you make changes in the [backend](./backend) source code, you will need to compile them and re-deploy a new version of your backend container.
 Use the `docker extension update` command to remove and re-install the extension automatically:
 
+MAKE SURE TO RE-BUILD YOUR IMAGE FIRST
 ```shell
-docker extension update mccormsy/gitDocked:latest
+docker extension update mccormsy/gitdocked:latest
 ```
 
 > If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.

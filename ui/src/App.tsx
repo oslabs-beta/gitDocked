@@ -57,7 +57,9 @@ export function App() {
   const ddClient = useDockerDesktopClient();
 
   const fetchAndDisplayResponse = async () => {
-    const result = await ddClient.extension.vm?.service?.get('/hello');
+    console.log('trying to fetch /api')
+    const result = await ddClient.extension.vm?.service?.get('/api');
+    console.log('result: ', result);
     setResponse(JSON.stringify(result));
   };
 
