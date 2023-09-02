@@ -59,13 +59,13 @@ This starts a development server that listens on port `3000`.
 You can now tell Docker Desktop to use this as the frontend source. In another terminal run:
 
 ```shell
-  docker extension dev ui-source mccormsy/gitDocked:latest http://localhost:3000
+  docker extension dev ui-source mccormsy/gitdocked:latest http://localhost:3000
 ```
 
 In order to open the Chrome Dev Tools for your extension when you click on the extension tab, run:
 
 ```shell
-  docker extension dev debug mccormsy/gitDocked:latest
+  docker extension dev debug mccormsy/gitdocked:latest
 ```
 
 Each subsequent click on the extension tab will also open Chrome Dev Tools. To stop this behaviour, run:

@@ -1,0 +1,90 @@
+.test {
+  font-size: xx-large;
+}
+
+.body {
+  background-color: rgb(228, 223, 223);
+  height: auto;
+  width: auto;
+}
+
+.box {
+  display: flex;
+  gap: 50px;
+  padding: 0px 10px 10px 10px;
+}
+
+.container-grid {
+  border: 10px;
+  height: auto;
+  width: auto;
+  border-radius: 25px;
+  /* background-color: aquamarine; */
+  display: grid;
+  grid-column-start: 0;
+  grid-column-end: 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.container {
+  border: 10px;
+  border-radius: 25px;
+  height: 200px;
+  width: 200px;
+  background-color: teal;
+  padding: 15px;
+}
+
+.small-button {
+  height: 20px;
+  width: 50px;
+  background-color: light gray;
+}
+
+.log-grid {
+  border: 10px;
+  background-color: teal;
+  border-radius: 25px;
+  display: grid;
+  grid-column-start: 0;
+  grid-column-end: 1;
+  grid-template-columns: 400px;
+  grid-template-rows: 50px;
+}
+
+h2 {
+
+}
+
+button {
+  height: 50px;
+  width: 100px;
+  background-color: light gray;
+}
+
+.log-list {
+  list-style: none;
+}
+
+.container-health {
+  background-color: pink;
+  border-radius: 25px;
+  height: auto;
+  width: 100%;
+}
+
+.health-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.health-items {
+  display: grid;
+  grid-template-columns: 100px;
+  grid-column-start: 0;
+  grid-column-end: 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-left: 180px;
+}

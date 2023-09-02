@@ -1,7 +1,12 @@
 import React from 'react';
+import {useState} from "react"
 import Button from '@mui/material/Button';
 import { createDockerDesktopClient } from '@docker/extension-api-client';
 import { Stack, TextField, Typography } from '@mui/material';
+import './styles.css'
+import Container from './Container';
+import StatusLog from './StatusLog';
+import ContainerHealth from './ContainerHealth';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -12,6 +17,42 @@ function useDockerDesktopClient() {
 }
 
 export function App() {
+  const [items, setItems] = useState([1, 2, 3])
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  function handleButtonClick() {
+    setLoggedIn(true)
+  }
+
+  return (
+    <>
+      <body className='body'>
+        <h1 className='test'>Welcome to your dashboard!</h1>
+        <button onClick={handleButtonClick}>Log in through Github</button>
+        <div className='box'>
+          <div className='container-grid'>
+            {/*Container goes here*/}
+            {items.map((item, index) => <Container key={index}/>)}
+          </div>
+
+          <div className='log-grid'>
+            {/*Log goes here*/}
+            {loggedIn && <StatusLog/>}
+            <h1>Not logged in!</h1>
+          </div>
+        </div>
+
+        <div className='container-health'>
+          {/* Container Health Comparison goes here */}
+          <ContainerHealth />
+        </div>
+      </body>
+    </>
+  );
+}
+
+{
+  /*
   const [response, setResponse] = React.useState<string>();
   const ddClient = useDockerDesktopClient();
 
@@ -49,7 +90,6 @@ export function App() {
           minRows={5}
           value={response ?? ''}
         />
-      </Stack>
-    </>
-  );
+  </Stack>
+  */
 }
