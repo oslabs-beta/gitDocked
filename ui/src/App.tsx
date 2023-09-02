@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useState} from "react"
 import Button from '@mui/material/Button';
 import { createDockerDesktopClient } from '@docker/extension-api-client';
@@ -19,11 +19,67 @@ function useDockerDesktopClient() {
 export function App() {
   const [items, setItems] = useState([1, 2, 3])
   const [loggedIn, setLoggedIn] = useState(false)
+  const [containers, setContainers] = React.useState<any[]>([]);
 
   function handleButtonClick() {
     setLoggedIn(true)
   }
 
+  const getContainers = async () => {
+    const containersClient = await ddClient.docker.listContainers({ all: true })
+    console.log('list containers: ', containersClient);
+  }
+
+  const liveStats = async () => {
+    await ddClient.docker.cli.exec('stop',
+    ['--all', '--no-trunc', '--format', '{{ json . }}'], {
+      stream: {
+        onOutput(data) {
+          console.log('data: ', data);
+          if (data.stdout) {
+            console.error('console.error: ', data.stdout);
+          } else {
+            console.log('stderr: ', data.stderr);
+          }
+        },
+        onError(error) {
+          console.error('onError: ', error);
+        },
+        onClose(exitCode) {
+          console.log("onClose with exit code " + exitCode);
+        },
+        splitOutputLines: true,
+      },
+    });
+  }
+
+  const getLogs = async () => {
+    const result = await ddClient.docker.cli.exec("info", [
+      "--format",
+      '"{{ json . }}"',
+    ]);
+    console.log('logs result: ', result);
+  };
+
+  //obtain docker destkop extension client
+const ddClient = createDockerDesktopClient();
+
+  useEffect(() => {
+    // List all containers
+    // ddClient.docker.cli.exec('ps', ['--all', '--format', '"{{json .}}"']).then((result) => {
+    //   // result.parseJsonLines() parses the output of the command into an array of objects
+    //   setContainers(result.parseJsonLines());
+    //   console.log("cli: ", result.parseJsonLines());
+    // });
+
+    getContainers();
+    // getLogs();
+    // liveStats();
+    // liveStats.close();
+
+  }, []);
+
+  
   return (
     <>
       <body className='body'>
