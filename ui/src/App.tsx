@@ -17,10 +17,11 @@ function useDockerDesktopClient() {
 }
 
 export function App() {
-  {/* Use an array to store our containers initial state is empty*/}
+  {/* Use an array to store our containers initial state is empty */}
   const [containers, setContainers] = useState([])
   {/* Use a boolean to check whether user is logged in or not. This will be used for conditional rendering of components*/}
   const [loggedIn, setLoggedIn] = useState(false)
+  const [response, setResponse] = useState([])
 
   const ddClient = useDockerDesktopClient()
 
@@ -28,6 +29,58 @@ export function App() {
   function handleButtonClick() {
     setLoggedIn(true)
     console.log('Button clicked!')
+  }
+
+  async function getInfoClick() {
+    const result = await ddClient.docker.cli.exec("info", [
+      "--format",
+      '"{{ json . }}"',
+    ]);
+    console.log(result.parseJsonLines());
+  }
+
+  async function getLogsClick() {
+    await ddClient.docker.cli.exec("logs", ["-f", "..."], {
+      stream: {
+        onOutput(data) {
+          if (data.stdout) {
+            console.error(data.stdout);
+          } else {
+            console.log(data.stderr);
+          }
+        },
+        onError(error) {
+          console.error(error);
+        },
+        onClose(exitCode) {
+          console.log("onClose with exit code " + exitCode);
+        },
+        splitOutputLines: true,
+      },
+    });
+  }
+
+  async function getEventsClick() {
+    await ddClient.docker.cli.exec(
+      "events",
+      ["--format", "{{ json . }}", "--filter", "container=my-container"],
+      {
+        stream: {
+          onOutput(data) {
+            if (data.stdout) {
+              const event = JSON.parse(data.stdout);
+              console.log(event);
+            } else {
+              console.log(data.stderr);
+            }
+          },
+          onClose(exitCode) {
+            console.log("onClose with exit code " + exitCode);
+          },
+          splitOutputLines: true,
+        },
+      }
+    );
   }
 
   // useEffect which will invoke an async function to retrieve all the user's containers and set the state equal to the array of objects
@@ -42,19 +95,20 @@ export function App() {
       .then(allContainers => {
         setContainers(allContainers)
       })
-
-  }, [])
+  }, []);
 
   return (
     <>
       <body className='body'>
-        <h1 className='test'>Welcome to your dashboard!!!!!</h1>
+        <h1 className='test'>Welcome to your dashboard!</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
+        <button onClick={getInfoClick}>Get Docker Info</button>
+        <button onClick={getLogsClick}>Get Docker Logs</button>
+        <button onClick={getEventsClick}>Get Docker Events</button>
         <div className='box'>
           <div className='container-grid'>
             {/*Containers go here*/}
             {containers.map((container, index) => {
-              console.log('these are the containers', container);
               return <Container key={index} details={container} />}
             )}
           </div>
