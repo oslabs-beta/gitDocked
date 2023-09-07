@@ -10,28 +10,46 @@ import ContainerHealth from './ContainerHealth';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
-const client = createDockerDesktopClient();
+const ddClient = createDockerDesktopClient();
 
 function useDockerDesktopClient() {
-  return client;
+  return ddClient;
 }
 
 export function App() {
-  const [items, setItems] = useState([1, 2, 3])
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [items, setItems] = useState([1, 2, 3]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authToken, setToken] = useState('somethin');
 
-  function handleButtonClick() {
-    setLoggedIn(true)
+  const queryParams = new URLSearchParams(window.location.search);
+  const code = queryParams.get('code');
+
+  function fetchToken(){
+    console.log('trying to fetch api');
+    ddClient.extension.vm?.service?.get('/api')
+    .then((response) => response)
+    .catch(err => err)
+  }
+  async function getToken(){
+    const response = await fetchToken()
+    console.log(response)
   }
 
+  if (!loggedIn && code) {
+    getToken()
+    setLoggedIn(true);
+  };
+  async function handleButtonClick() {
+    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+  }
   return (
     <>
       <body className='body'>
-        <h1 className='test'>Welcome to your dashboard!</h1>
+        <h1 className='test'>Welcome to your dashboard! {authToken}</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
         <div className='box'>
           <div className='container-grid'>
-            {/*Container goes here*/}
+            {/* Container goes here */}
             {items.map((item, index) => <Container key={index}/>)}
           </div>
 
