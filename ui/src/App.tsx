@@ -87,7 +87,9 @@ export function App() {
     setResponse(JSON.stringify(result));
   };
 
-  <Typography variant="h3">Docker extension</Typography>
+  return (
+    <>
+      <Typography variant="h3">GitDocked</Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
         This is a basic page rendered with MUI, using Docker's theme. Read the
         MUI documentation to learn more. Using MUI in a conventional way and
