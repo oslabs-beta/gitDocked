@@ -2,9 +2,22 @@ services:
   GitDocked:
     image: ${DESKTOP_PLUGIN_IMAGE}
     container_name: gitdocked
+    ports:
+      - 3333:3333
     volumes:
+    #create named volume which is mapped to the backend/user directory in the extension container
+    #the /user directory is copied into the extension container in the Dockerfile
     - user:/backend/user
     - /var/run/docker.sock.raw:/var/run/docker.sock
+  
+  postgresdb:
+    image: gitdocked/gitdocked-db:latest
+    restart: always
+    container_name: gitdockeddb
+    ports: 5432:5432
+    volumes:
+      - gitdocked-data:/var/lib/postgresql/data
+  
 
 volumes:
   user:
