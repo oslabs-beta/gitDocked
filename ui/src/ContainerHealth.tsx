@@ -11,8 +11,7 @@ export default function ContainerHealth() {
         <button>Container</button>
       </div>
     <div className="health-items">
-      <Container />
-      <Container />
+      {/* Still have to implement functionality to show 2 containers side by side for comparison stats*/}
     </div>
     </>
   )
