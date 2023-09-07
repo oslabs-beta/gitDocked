@@ -11,8 +11,9 @@ app.use(bodyParser.json());
 app.use(cors);
 
 // app.use('/api/github-oauth', gitHubRouter);
-app.get('/api', (req, res)=>{
-    res.status(200).send('api worked')
+app.get('/api', (req, res) => {
+    console.log('api hit')
+    res.status(200).send('api worked');
 });
 
 export default app;

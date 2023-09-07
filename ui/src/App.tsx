@@ -17,6 +17,7 @@ function useDockerDesktopClient() {
 }
 
 export function App() {
+  const ddClient = useDockerDesktopClient();
   const [items, setItems] = useState([1, 2, 3]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('somethin');
@@ -24,19 +25,21 @@ export function App() {
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
 
-  function fetchToken(){
+  async function fetchToken(){
     console.log('trying to fetch api');
-    ddClient.extension.vm?.service?.get('/api')
-    .then((response) => response)
-    .catch(err => err)
+
+    const result = await ddClient.extension.vm?.service?.get('/api');
+    console.log(result);
+    setToken(JSON.stringify(result));
+
   }
   async function getToken(){
-    const response = await fetchToken()
-    console.log(response)
+    const response = fetchToken();
+    setToken(JSON.stringify(response));
   }
 
   if (!loggedIn && code) {
-    getToken()
+    fetchToken();
     setLoggedIn(true);
   };
   async function handleButtonClick() {
