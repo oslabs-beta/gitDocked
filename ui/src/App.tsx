@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import Button from '@mui/material/Button';
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import { Stack, TextField, Typography } from '@mui/material';
@@ -11,14 +11,17 @@ import ContainerHealth from './ContainerHealth';
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
 const ddClient = createDockerDesktopClient();
+// const client = createDockerDesktopClient()
 
-function useDockerDesktopClient() {
-  return ddClient;
-}
+// function useDockerDesktopClient() {
+//   return ddClient;
+// }
 
 export function App() {
   const ddClient = createDockerDesktopClient();
-  const [items, setItems] = useState([1, 2, 3]);
+  {/* Use an array to store our containers initial state is empty*/}
+  const [containers, setContainers] = useState([]);
+  {/* Use a boolean to check whether user is logged in or not. This will be used for conditional rendering of components*/}
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
 
@@ -35,20 +38,18 @@ export function App() {
     ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
   };
 
-  if (!loggedIn && code) {
-    fetchToken();
-    setLoggedIn(true);
-  };
-
   return (
     <>
       <body className='body'>
-        <h1 className='test'>Welcome to your dashboard!</h1>
+        <h1 className='test'>Welcome to your dashboard!!!!!</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
         <div className='box'>
           <div className='container-grid'>
-            {/* Container goes here */}
-            {items.map((item, index) => <Container key={index}/>)}
+            {/*Containers go here*/}
+            {containers.map((container, index) => {
+              console.log('these are the containers', container);
+              return <Container key={index} details={container} />}
+            )}
           </div>
 
           <div className='log-grid'>
