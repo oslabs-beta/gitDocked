@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState} from "react"
 import Button from '@mui/material/Button';
-import { createDockerDesktopClient } from '@docker/extension-api-client';
+import { createDockerDesktopClient } from "@docker/extension-api-client";
 import { Stack, TextField, Typography } from '@mui/material';
 import './styles.css'
 import Container from './Container';
@@ -17,38 +17,33 @@ function useDockerDesktopClient() {
 }
 
 export function App() {
-  const ddClient = useDockerDesktopClient();
+  const ddClient = createDockerDesktopClient();
   const [items, setItems] = useState([1, 2, 3]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [authToken, setToken] = useState('somethin');
+  const [authToken, setToken] = useState('');
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
 
   async function fetchToken(){
-    console.log('trying to fetch api');
+    const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
+    setToken(`${result}`);
+    console.log(result)
+  };
 
-    const result = await ddClient.extension.vm?.service?.get('/api');
-    console.log(result);
-    setToken(JSON.stringify(result));
-
-  }
-  async function getToken(){
-    const response = fetchToken();
-    setToken(JSON.stringify(response));
-  }
+  async function handleButtonClick() {
+    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+  };
 
   if (!loggedIn && code) {
     fetchToken();
     setLoggedIn(true);
   };
-  async function handleButtonClick() {
-    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
-  }
+
   return (
     <>
       <body className='body'>
-        <h1 className='test'>Welcome to your dashboard! {authToken}</h1>
+        <h1 className='test'>Welcome to your dashboard!</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
         <div className='box'>
           <div className='container-grid'>
