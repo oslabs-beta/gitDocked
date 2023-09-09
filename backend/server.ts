@@ -3,6 +3,7 @@ import fs from 'fs';
 import socketServer from './server/socketServer';
 import { CONFIG } from './config';
 
+
 // Delete existing socket file to allow for reusability
 try {
   if (fs.existsSync(CONFIG.SOCKET_PATH)) {
