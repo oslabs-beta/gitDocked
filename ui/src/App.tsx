@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from "react"
 import Button from '@mui/material/Button';
-import { createDockerDesktopClient } from '@docker/extension-api-client';
+import { createDockerDesktopClient } from "@docker/extension-api-client";
 import { Stack, TextField, Typography } from '@mui/material';
 import './styles.css'
 import Container from './Container';
@@ -10,40 +10,33 @@ import ContainerHealth from './ContainerHealth';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
-const client = createDockerDesktopClient()
+const ddClient = createDockerDesktopClient();
+// const client = createDockerDesktopClient()
 
-function useDockerDesktopClient() {
-  return client;
-}
+// function useDockerDesktopClient() {
+//   return ddClient;
+// }
 
 export function App() {
+  const ddClient = createDockerDesktopClient();
   {/* Use an array to store our containers initial state is empty*/}
-  const [containers, setContainers] = useState([])
+  const [containers, setContainers] = useState([]);
   {/* Use a boolean to check whether user is logged in or not. This will be used for conditional rendering of components*/}
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authToken, setToken] = useState('');
 
-  const ddClient = useDockerDesktopClient()
+  const queryParams = new URLSearchParams(window.location.search);
+  const code = queryParams.get('code');
 
-  {/* This is a Work in Progress (WIP) but this button will kick off the Github oAuth flow */}
-  function handleButtonClick() {
-    setLoggedIn(true)
-    console.log('Button clicked!')
-  }
+  async function fetchToken(){
+    const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
+    setToken(`${result}`);
+    console.log(result)
+  };
 
-  // useEffect which will invoke an async function to retrieve all the user's containers and set the state equal to the array of objects
-  // each object will be a container
-  useEffect(() => {
-
-    async function getContainer() {
-      return await ddClient.docker.listContainers({"all": true})
-    }
-
-    getContainer()
-      .then(allContainers => {
-        setContainers(allContainers)
-      })
-
-  }, [])
+  async function handleButtonClick() {
+    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+  };
 
   return (
     <>
