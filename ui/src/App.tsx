@@ -33,7 +33,10 @@ export function App() {
     setToken(`${result}`);
     console.log(result)
   };
-
+  if(!loggedIn && code){
+    fetchToken();
+    setLoggedIn(true);
+  }
   async function handleButtonClick() {
     ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
   };
