@@ -1,9 +1,15 @@
 {
   "dependencies": {
     "@docker/extension-api-client": "^0.3.4",
-    "cors": "^2.8.5"
+    "prettier": "^3.0.3"
   },
   "devDependencies": {
-    "@docker/extension-api-client-types": "^0.3.4"
+    "@docker/extension-api-client-types": "^0.3.4",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2"
   }
 }
