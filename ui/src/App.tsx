@@ -18,8 +18,6 @@ function useDockerDesktopClient() {
 
 // new comment
 
-// other new comment
-
 export function App() {
   {
     /* Use an array to store our containers initial state is empty */
