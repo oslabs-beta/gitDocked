@@ -2,7 +2,7 @@
 FROM postgres
 
 # Copy the initialization script to the container
-COPY data.sql /docker-entrypoint-initdb.d/
+COPY initialization-data.sql /docker-entrypoint-initdb.d/
 
 # Set environment variables for PostgreSQL configuration
 ENV POSTGRES_USER postgres
