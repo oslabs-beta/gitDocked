@@ -5,7 +5,7 @@ import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
 
 import { App } from './App';
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/*
       If you eject from MUI (which we don't recommend!), you should add

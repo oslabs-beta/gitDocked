@@ -10,15 +10,16 @@ import ContainerHealth from './ContainerHealth';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
-const client = createDockerDesktopClient();
+// const client = createDockerDesktopClient();
 
-function useDockerDesktopClient() {
-  return ddClient;
-}
+// function useDockerDesktopClient() {
+//   return ddClient;
+// }
 
 // new comment
 
 export function App() {
+  const ddClient = createDockerDesktopClient()
   {
     /* Use an array to store our containers initial state is empty */
   }
@@ -27,20 +28,42 @@ export function App() {
     /* Use a boolean to check whether user is logged in or not. This will be used for conditional rendering of components*/
   }
   const [loggedIn, setLoggedIn] = useState(false);
+  const [authToken, setToken] = useState('');
   const [response, setResponse] = useState([]);
 
-  const ddClient = useDockerDesktopClient();
+  const queryParams = new URLSearchParams(window.location.search);
+  const code = queryParams.get('code');
+
+  async function fetchToken(){
+    console.log('fetching token');
+    try {
+      console.log('in try block');
+      const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
+      console.log('got result');
+      setToken(`${result}`);
+      console.log('this is the result', result)
+    } catch (error) {
+      console.log('this is the error', error);
+    }
+  }
+
+  if(!loggedIn && code){
+    fetchToken();
+    setLoggedIn(true);
+    console.log('this is the code', code);
+  }
+
+  // const ddClient = useDockerDesktopClient();
 
   {
     /* This is a Work in Progress (WIP) but this button will kick off the Github oAuth flow */
   }
-  function handleButtonClick() {
-    setLoggedIn(true);
-    console.log('Button clicked!');
-  }
+  async function handleButtonClick() {
+    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+  };
 
   async function getStatsClick() {
-    let newData = [];
+    let newData= [];
 
     const TERMINAL_CLEAR_CODE = '\x1B[2J\x1B[H';
 
@@ -138,11 +161,11 @@ export function App() {
   return (
     <>
       <body className="body">
-        <h1 className="test">Welcome to your dashboard!</h1>
+        <h1 className="test">Welcome to your dashboard!!!</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
         <button onClick={getStatsClick}>Get Docker Stats</button>
-        {/* <button onClick={getLogsClick}>Get Docker Logs</button>
-        <button onClick={getEventsClick}>Get Docker Events</button> */}
+        <button onClick={getLogsClick}>Get Docker Logs</button>
+        <button onClick={getEventsClick}>Get Docker Events</button>
         <div className="box">
           <div className="container-grid">
             {/*Containers go here*/}
