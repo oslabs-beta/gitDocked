@@ -17,6 +17,8 @@ const ddClient = createDockerDesktopClient();
 //   return ddClient;
 // }
 
+// other new comment
+
 export function App() {
   const ddClient = createDockerDesktopClient();
   {/* Use an array to store our containers initial state is empty*/}
