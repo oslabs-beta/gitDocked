@@ -25,6 +25,8 @@ services:
   postgresdb:
     image: mccormsy/gitdocked-db:latest
     container_name: gitdockeddb
+    networks:
+      - gitdocked
     environment: 
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mysecretpassword

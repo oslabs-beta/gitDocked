@@ -8,15 +8,21 @@ const pool = new Pool({
   database: "git_docked_db",
 })
 
-console.log('connected to database');
+pool.on("connect", () => {
+  console.log("connected to the db")
+});
+
+pool.on('error', function (err, client) {
+  console.error('idle client error', err.message, err.stack);
+});
 
 const query = (
   text: string,
-  params?: any[],
+  values?: any[],
   callback?: (err: Error, result: any) => void
 ): Promise<any> => {
   console.log('Executed GitDocked query: ', text);
-  return pool.query(text, params, callback);
+  return pool.query(text, values, callback);
 };
 
 export { query };
