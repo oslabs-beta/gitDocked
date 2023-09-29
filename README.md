@@ -93,6 +93,20 @@ docker extension update mccormsy/gitdocked:latest
 
 > Extension containers are hidden from the Docker Dashboard by default. You can change this in Settings > Extensions > Show Docker Extensions system containers.
 
+## Accessing the database
+
+Please utilize the following instructions in order to access the database container:
+  - find your container id for your database by typing the following in the command line interface
+    - docker ps
+  - the container id will be from the image mccormsy/gitdocked-db:latest
+  - using the container id, execute the following command:
+    - docker exec -it  <container id> psql -U postgres git_docked_db
+  - use the following command to see all tables: \dt 
+    - (postgres needs to be installed on your computer/server)
+  - you may now run postgres commands from the CLI to view/modify the tables
+  - type 'exit' (without the quotes) to return to the CLI
+
+
 ### Clean up
 
 To remove the extension:

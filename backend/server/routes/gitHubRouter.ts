@@ -15,8 +15,8 @@ fetch(
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
       return query(
-        'INSERT INTO users (userId, test) VALUES ($1, $2)',
-        [1, 'testString']
+        'INSERT INTO users (authToken, test) VALUES ($1, $2)',
+        [authToken, 'testString']
       )
       .then(() => {
         console.log('Database INSERT successful');
