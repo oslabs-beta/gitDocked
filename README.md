@@ -56,7 +56,7 @@ Assuming your app runs on the default port, start your UI app and then run:
 
 This starts a development server that listens on port `3000`.
 
-You can now tell Docker Desktop to use this as the frontend source. In another terminal run:
+You can now tell Docker Desktop to use this as the frontend source. In another terminal cd into ui then run:
 
 ```shell
   docker extension dev ui-source mccormsy/gitdocked:latest http://localhost:3000
@@ -100,7 +100,7 @@ Please utilize the following instructions in order to access the database contai
     - docker ps
   - the container id will be from the image mccormsy/gitdocked-db:latest
   - using the container id, execute the following command:
-    - docker exec -it  <container id> psql -U postgres git_docked_db
+    - docker exec -it container-id psql -U postgres git_docked_db
   - use the following command to see all tables: \dt 
     - (postgres needs to be installed on your computer/server)
   - you may now run postgres commands from the CLI to view/modify the tables
