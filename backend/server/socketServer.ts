@@ -3,7 +3,7 @@ import express from 'express';
 import { Express } from 'express';
 import bodyParser from 'body-parser';
 import gitHubRouter from '../server/routes/gitHubRouter';
-import { query } from './models/userModel';
+// import { query } from './models/userModel';
 
 const app: Express = express();
 
