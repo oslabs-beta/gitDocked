@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import dotenv from 'dotenv';
+import { query } from '../models/userModel';
 dotenv.config();
 
 const clientID: string | undefined = process.env.CLIENT_ID;
@@ -18,7 +19,19 @@ router.get('/:code', (req, res) => {
     .then((token) => {
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
-      return res.status(200).send(authToken);
+      return query(
+        'INSERT INTO users (authToken, test) VALUES ($1, $2)',
+        [authToken, 'testString']
+      )
+        .then(() => {
+          console.log('Database INSERT successful');
+          return res.status(200).send(authToken);
+        })
+        .catch((error) => {
+        //error handler during oauth process
+          console.error('Error:', error);
+          return res.status(500).send('Internal Server Error');
+        });
     });
 });
 
