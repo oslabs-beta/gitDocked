@@ -2,9 +2,46 @@ services:
   GitDocked:
     image: ${DESKTOP_PLUGIN_IMAGE}
     container_name: gitdocked
+    networks:
+      - gitdocked
+    ports:
+      - 3333:3333
     volumes:
-    - user:/backend/user
-    - /var/run/docker.sock.raw:/var/run/docker.sock
+    #create named volume which is mapped to the backend/user directory in the extension container
+    #the /user directory is copied into the extension container in the Dockerfile
+      - user:/backend/user
+      - /var/run/docker.sock.raw:/var/run/docker.sock
+    # depends_on: 
+    #   - postgresdb
+  
+  # postgresdb:
+    # image: gitdocked/gitdocked-db:latest
+    # # restart: always
+    # container_name: gitdockeddb
+    # ports:
+    #   - "5432:5432"  # Expose port 5432 on the host and map it to port 5432 in the container
+    # volumes:
+    #   - gitdocked-data:/var/lib/postgresql/data
+  postgresdb:
+    image: mccormsy/gitdocked-db:latest
+    container_name: gitdockeddb
+    networks:
+      - gitdocked
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=git_docked_db
+    ports:
+      - "5432:5432"  # Expose port 5432 on the host and map it to port 5432 in the container
+    volumes: 
+      - gitdocked-data:/var/lib/postgresql/data
+  
 
 volumes:
   user:
+  gitdocked-data:
+
+networks:
+  gitdocked:
+    driver: bridge
+    name: gitdocked
