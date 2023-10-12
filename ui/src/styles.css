@@ -31,8 +31,8 @@
 .container {
   border: 10px;
   border-radius: 25px;
-  height: 200px;
-  width: 200px;
+  height: 300px;
+  width: 300px;
   background-color: teal;
   padding: 15px;
 }
@@ -69,7 +69,7 @@ button {
 }
 
 .container-health {
-  background-color: pink;
+  background-color: rgb(41, 192, 154);
   border-radius: 25px;
   height: auto;
   width: 100%;
