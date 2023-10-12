@@ -175,7 +175,7 @@ export function App() {
           {/* Container Health Comparison goes here */}
           <ContainerHealth />
         </div>
-      </div>
+      </body>
     </>
   );
 }
