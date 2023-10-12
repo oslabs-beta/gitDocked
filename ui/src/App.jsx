@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { createDockerDesktopClient } from "@docker/extension-api-client";
+import { createDockerDesktopClient } from '@docker/extension-api-client';
 import { Stack, TextField, Typography } from '@mui/material';
 import './styles.css';
 import Container from './Container';
@@ -19,7 +19,7 @@ import ContainerHealth from './ContainerHealth';
 // new comment
 
 export function App() {
-  const ddClient = createDockerDesktopClient()
+  const ddClient = createDockerDesktopClient();
   {
     /* Use an array to store our containers initial state is empty */
   }
@@ -41,7 +41,7 @@ export function App() {
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
       console.log('got result');
       setToken(`${result}`);
-      console.log('this is the result', result)
+      console.log('this is the result', result);
     } catch (error) {
       console.log('this is the error', error);
     }
@@ -55,12 +55,11 @@ export function App() {
 
   // const ddClient = useDockerDesktopClient();
 
-  {
-    /* This is a Work in Progress (WIP) but this button will kick off the Github oAuth flow */
+  // Users are redirected to an an external page to request
+  // their GitHub identity.
+  async function githubOAuthButton() {
+    ddClient.host.openExternal(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_CLIENT_ID}`);
   }
-  async function handleButtonClick() {
-    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
-  };
 
   async function getStatsClick() {
     let newData= [];
@@ -162,7 +161,7 @@ export function App() {
     <>
       <body className="body">
         <h1 className="test">Welcome to your dashboard!!!</h1>
-        <button onClick={handleButtonClick}>Log in through Github</button>
+        <button onClick={githubOAuthButton}>Log in through Github</button>
         <button onClick={getStatsClick}>Get Docker Stats</button>
         <button onClick={getLogsClick}>Get Docker Logs</button>
         <button onClick={getEventsClick}>Get Docker Events</button>

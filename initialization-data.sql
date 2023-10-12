@@ -1,0 +1,4 @@
+CREATE TABLE users (
+    authToken VARCHAR(255) PRIMARY KEY NOT NULL,
+    test VARCHAR(255)
+);
