@@ -83,7 +83,7 @@ Note that an extension doesn't necessarily need a backend container, but in this
 Whenever you make changes in the [backend](./backend) source code, you will need to compile them and re-deploy a new version of your backend container.
 Use the `docker extension update` command to remove and re-install the extension automatically:
 
-MAKE SURE TO RE-BUILD YOUR IMAGE FIRST (docker buildx build -t mccormsy/gitdocked: latest . --load)
+MAKE SURE TO RE-BUILD YOUR IMAGE FIRST (docker buildx build -t mccormsy/gitdocked:latest . --load)
 
 ```shell
 docker extension update mccormsy/gitdocked:latest
@@ -100,8 +100,8 @@ Please utilize the following instructions in order to access the database contai
     - docker ps
   - the container id will be from the image mccormsy/gitdocked-db:latest
   - using the container id, execute the following command:
-    - docker exec -it container-id psql -U postgres git_docked_db
-  - use the following command to see all tables: \dt 
+    - docker exec -it  <container id> psql -U postgres git_docked_db
+  - use the following command to see all tables: \dt
     - (postgres needs to be installed on your computer/server)
   - you may now run postgres commands from the CLI to view/modify the tables
   - type 'exit' (without the quotes) to return to the CLI

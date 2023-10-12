@@ -12,12 +12,6 @@ import ContainerHealth from './ContainerHealth';
 // If you're running this React app in a browser, it won't work properly.
 // const client = createDockerDesktopClient();
 
-// function useDockerDesktopClient() {
-//   return ddClient;
-// }
-
-// new comment
-
 export function App() {
   const ddClient = createDockerDesktopClient();
   {
@@ -29,12 +23,11 @@ export function App() {
   }
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
-  const [response, setResponse] = useState([]);
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
 
-  async function fetchToken(){
+  async function fetchToken() {
     console.log('fetching token');
     try {
       console.log('in try block');
@@ -47,7 +40,7 @@ export function App() {
     }
   }
 
-  if(!loggedIn && code){
+  if (!loggedIn && code) {
     fetchToken();
     setLoggedIn(true);
     console.log('this is the code', code);
@@ -122,37 +115,35 @@ export function App() {
   }
 
   async function getEventsClick() {
-    await ddClient.docker.cli.exec(
-      'events',
-      ['--format', '{{ json . }}', '--filter', 'container=my-container'],
-      {
-        stream: {
-          onOutput(data) {
-            if (data.stdout) {
-              const event = JSON.parse(data.stdout);
-              console.log(event);
-            } else {
-              console.log(data.stderr);
-            }
-          },
-          onClose(exitCode) {
-            console.log('onClose with exit code ' + exitCode);
-          },
-          splitOutputLines: true,
+    await ddClient.docker.cli.exec('events', ['--format', '{{ json . }}', '--filter', 'container=my-container'], {
+      stream: {
+        onOutput(data) {
+          if (data.stdout) {
+            const event = JSON.parse(data.stdout);
+            console.log(event);
+          } else {
+            console.log(data.stderr);
+          }
         },
-      }
-    );
+        onClose(exitCode) {
+          console.log('onClose with exit code ' + exitCode);
+        },
+        splitOutputLines: true,
+      },
+    });
   }
 
   // useEffect which will invoke an async function to retrieve all the user's containers and set the state equal to the array of objects
   // each object will be a container
   useEffect(() => {
+    // gets the list of running containers
     async function getContainer() {
-      console.log(await ddClient.docker.listContainers({ all: true }));
-      return await ddClient.docker.listContainers({ all: true });
+      return await ddClient.docker.listContainers();
     }
 
+    // sets the state of containers to only our running containers
     getContainer().then((allContainers) => {
+      console.log('all containers', allContainers);
       setContainers(allContainers);
     });
   }, []);
@@ -165,69 +156,26 @@ export function App() {
         <button onClick={getStatsClick}>Get Docker Stats</button>
         <button onClick={getLogsClick}>Get Docker Logs</button>
         <button onClick={getEventsClick}>Get Docker Events</button>
-        <div className="box">
-          <div className="container-grid">
+        <div className='box'>
+          <div className='container-grid'>
             {/*Containers go here*/}
             {containers.map((container, index) => {
               return <Container key={index} details={container} />;
             })}
           </div>
 
-          <div className="log-grid">
+          <div className='log-grid'>
             {/*Log goes here*/}
             {loggedIn && <StatusLog />}
             <h1>Not logged in!</h1>
           </div>
         </div>
 
-        <div className="container-health">
+        <div className='container-health'>
           {/* Container Health Comparison goes here */}
           <ContainerHealth />
         </div>
-      </body>
+      </div>
     </>
   );
-}
-
-{
-  /*
-  const [response, setResponse] = React.useState<string>();
-  const ddClient = useDockerDesktopClient();
-
-  const fetchAndDisplayResponse = async () => {
-    console.log('trying to fetch /api')
-    const result = await ddClient.extension.vm?.service?.get('/api');
-    console.log('result: ', result);
-    setResponse(JSON.stringify(result));
-  };
-
-  return (
-    <>
-      <Typography variant="h3">GitDocked</Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        This is a basic page rendered with MUI, using Docker's theme. Read the
-        MUI documentation to learn more. Using MUI in a conventional way and
-        avoiding custom styling will help make sure your extension continues to
-        look great as Docker's theme evolves.
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        Pressing the below button will trigger a request to the backend. Its
-        response will appear in the textarea.
-      </Typography>
-      <Stack direction="row" alignItems="start" spacing={2} sx={{ mt: 4 }}>
-        <Button variant="contained" onClick={fetchAndDisplayResponse}>
-          Call backend
-        </Button>
-
-        <TextField
-          label="Backend response"
-          sx={{ width: 480 }}
-          disabled
-          multiline
-          variant="outlined"
-          minRows={5}
-          value={response ?? ''}
-        />
-  </Stack>
-  */
 }
