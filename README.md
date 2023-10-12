@@ -56,7 +56,7 @@ Assuming your app runs on the default port, start your UI app and then run:
 
 This starts a development server that listens on port `3000`.
 
-You can now tell Docker Desktop to use this as the frontend source. In another terminal run:
+You can now tell Docker Desktop to use this as the frontend source. In another terminal cd into ui then run:
 
 ```shell
   docker extension dev ui-source mccormsy/gitdocked:latest http://localhost:3000

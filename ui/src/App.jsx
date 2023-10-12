@@ -48,11 +48,49 @@ export function App() {
 
   // const ddClient = useDockerDesktopClient();
 
-  {
-    /* This is a Work in Progress (WIP) but this button will kick off the Github oAuth flow */
+  // Users are redirected to an an external page to request
+  // their GitHub identity.
+  async function githubOAuthButton() {
+    ddClient.host.openExternal(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_CLIENT_ID}`);
   }
-  async function handleButtonClick() {
-    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+
+  async function getStatsClick() {
+    let newData= [];
+
+    const TERMINAL_CLEAR_CODE = '\x1B[2J\x1B[H';
+
+    const result = ddClient.docker.cli.exec(
+      'stats',
+      ['--no-trunc', '--format', '{{ json . }}'],
+      {
+        stream: {
+          onOutput(data) {
+            if (data.stdout?.includes(TERMINAL_CLEAR_CODE)) {
+              // This stdout begins with the terminal clear code,
+              // meaning that it is a new sample of data.
+              setResponse(newData);
+              newData = [];
+              newData.push(
+                JSON.parse(data.stdout.replace(TERMINAL_CLEAR_CODE, ''))
+              );
+              console.log('included the terminal clear code and data', data);
+            } else {
+              console.log('else block hit', data);
+              newData.push(JSON.parse(data.stdout ?? ''));
+            }
+          },
+          onError(error) {
+            console.error(error);
+            return;
+          },
+          onClose(exitCode) {
+            console.log('docker stats exec exited with code ' + exitCode);
+            return;
+          },
+          splitOutputLines: true,
+        },
+      }
+    );
   }
 
   async function getLogsClick() {
@@ -112,9 +150,10 @@ export function App() {
 
   return (
     <>
-      <div className='body'>
-        <h1 className='test'>Welcome to your dashboard</h1>
-        <button onClick={handleButtonClick}>Log in through Github</button>
+      <body className="body">
+        <h1 className="test">Welcome to your dashboard!!!</h1>
+        <button onClick={githubOAuthButton}>Log in through Github</button>
+        <button onClick={getStatsClick}>Get Docker Stats</button>
         <button onClick={getLogsClick}>Get Docker Logs</button>
         <button onClick={getEventsClick}>Get Docker Events</button>
         <div className='box'>
