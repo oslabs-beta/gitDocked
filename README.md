@@ -93,6 +93,12 @@ docker extension update mccormsy/gitdocked:latest
 
 > Extension containers are hidden from the Docker Dashboard by default. You can change this in Settings > Extensions > Show Docker Extensions system containers.
 
+## Building the database
+  - the database is built from Dockerfile-database
+  - use the following instruction to rebuild the image related to the Dockerfile-database:
+    - docker build -t mccormsy/gitdocked-db:latest -f Dockerfile-database . --push
+  - the database can be built to a different DockerHub image repository - docker-compose must be updated to reflect this change
+
 ## Accessing the database
 
 Please utilize the following instructions in order to access the database container:
