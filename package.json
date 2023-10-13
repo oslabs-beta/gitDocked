@@ -2,7 +2,8 @@
   "dependencies": {
     "@docker/extension-api-client": "^0.3.4",
     "npm": "^10.1.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@docker/extension-api-client-types": "^0.3.4",
