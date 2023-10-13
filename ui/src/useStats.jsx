@@ -8,7 +8,7 @@ export default function useStats(name) {
     '-a',
     '--no-stream',
     '--format',
-    '{"Container":"{{.Container}}","Name":"{{.Name}}","CPUPerc":"{{.CPUPerc}}","MemUsage":"{{.MemUsage}}","MemPerc":"{{.MemPerc}}","NetIO":"{{.NetIO}}","BlockIO":"{{.BlockIO}}"}',
+    '"Container":"{{.Container}}","Name":"{{.Name}}","CPUPerc":"{{.CPUPerc}}","MemUsage":"{{.MemUsage}}","MemPerc":"{{.MemPerc}}","NetIO":"{{.NetIO}}","BlockIO":"{{.BlockIO}}"',
     `${name}`,
   ]);
 

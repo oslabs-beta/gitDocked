@@ -26,9 +26,10 @@ export default function Container({ details }) {
 
           // Replace the curly braces with double quotes to make it valid JSON
           const validJsonString = cleanedStdout.replace(/{/g, '{"').replace(/}/g, '"}').replace(/,/g, '","').replace(/:/g, '":"');
-
+          // add the curly brackets back in
+          const addedCurlyBracketsJsonString = ` { "${validJsonString}" }`;
           // Now parse the JSON string into an object
-          const parsedObject = JSON.parse(validJsonString);
+          const parsedObject = JSON.parse(addedCurlyBracketsJsonString);
 
           console.log(parsedObject);
           setStats({ ...parsedObject });

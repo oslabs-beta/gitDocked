@@ -55,42 +55,36 @@ export function App() {
   }
 
   async function getStatsClick() {
-    let newData= [];
+    let newData = [];
 
     const TERMINAL_CLEAR_CODE = '\x1B[2J\x1B[H';
 
-    const result = ddClient.docker.cli.exec(
-      'stats',
-      ['--no-trunc', '--format', '{{ json . }}'],
-      {
-        stream: {
-          onOutput(data) {
-            if (data.stdout?.includes(TERMINAL_CLEAR_CODE)) {
-              // This stdout begins with the terminal clear code,
-              // meaning that it is a new sample of data.
-              setResponse(newData);
-              newData = [];
-              newData.push(
-                JSON.parse(data.stdout.replace(TERMINAL_CLEAR_CODE, ''))
-              );
-              console.log('included the terminal clear code and data', data);
-            } else {
-              console.log('else block hit', data);
-              newData.push(JSON.parse(data.stdout ?? ''));
-            }
-          },
-          onError(error) {
-            console.error(error);
-            return;
-          },
-          onClose(exitCode) {
-            console.log('docker stats exec exited with code ' + exitCode);
-            return;
-          },
-          splitOutputLines: true,
+    const result = ddClient.docker.cli.exec('stats', ['--no-trunc', '--format', '{{ json . }}'], {
+      stream: {
+        onOutput(data) {
+          if (data.stdout?.includes(TERMINAL_CLEAR_CODE)) {
+            // This stdout begins with the terminal clear code,
+            // meaning that it is a new sample of data.
+            setResponse(newData);
+            newData = [];
+            newData.push(JSON.parse(data.stdout.replace(TERMINAL_CLEAR_CODE, '')));
+            console.log('included the terminal clear code and data', data);
+          } else {
+            console.log('else block hit', data);
+            newData.push(JSON.parse(data.stdout ?? ''));
+          }
         },
-      }
-    );
+        onError(error) {
+          console.error(error);
+          return;
+        },
+        onClose(exitCode) {
+          console.log('docker stats exec exited with code ' + exitCode);
+          return;
+        },
+        splitOutputLines: true,
+      },
+    });
   }
 
   async function getLogsClick() {
@@ -150,31 +144,32 @@ export function App() {
 
   return (
     <>
-      <body className="body">
-        <h1 className="test">Welcome to your dashboard!!!</h1>
-        <button onClick={githubOAuthButton}>Log in through Github</button>
-        <button onClick={getStatsClick}>Get Docker Stats</button>
-        <button onClick={getLogsClick}>Get Docker Logs</button>
-        <button onClick={getEventsClick}>Get Docker Events</button>
-        <div className='box'>
-          <div className='container-grid'>
-            {/*Containers go here*/}
-            {containers.map((container, index) => {
-              return <Container key={index} details={container} />;
-            })}
+      <div>
+        <body className='body'>
+          <h1 className='test'>Welcome to your dashboard!</h1>
+          <button onClick={githubOAuthButton}>Log in through Github</button>
+          <button onClick={getLogsClick}>Get Docker Logs</button>
+          <button onClick={getEventsClick}>Get Docker Events</button>
+          <div className='box'>
+            <div className='container-grid'>
+              {/*Containers go here*/}
+              {containers.map((container, index) => {
+                return <Container key={index} details={container} />;
+              })}
+            </div>
+
+            <div className='log-grid'>
+              {/*Log goes here*/}
+              {loggedIn && <StatusLog />}
+              <h1>Not logged in!</h1>
+            </div>
           </div>
 
-          <div className='log-grid'>
-            {/*Log goes here*/}
-            {loggedIn && <StatusLog />}
-            <h1>Not logged in!</h1>
+          <div className='container-health'>
+            {/* Container Health Comparison goes here */}
+            <ContainerHealth />
           </div>
-        </div>
-
-        <div className='container-health'>
-          {/* Container Health Comparison goes here */}
-          <ContainerHealth />
-        </div>
+        </body>
       </div>
     </>
   );
