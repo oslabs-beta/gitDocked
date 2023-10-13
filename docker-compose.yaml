@@ -14,14 +14,6 @@ services:
     # depends_on: 
     #   - postgresdb
   
-  # postgresdb:
-    # image: gitdocked/gitdocked-db:latest
-    # # restart: always
-    # container_name: gitdockeddb
-    # ports:
-    #   - "5432:5432"  # Expose port 5432 on the host and map it to port 5432 in the container
-    # volumes:
-    #   - gitdocked-data:/var/lib/postgresql/data
   postgresdb:
     image: mccormsy/gitdocked-db:latest
     container_name: gitdockeddb
