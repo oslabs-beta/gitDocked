@@ -11,14 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "adm-zip": "^0.5.10",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "decompress": "^4.2.1",
     "dockerode": "^3.3.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "fetch-charset-detection": "^1.0.1",
     "fs-extra": "^11.1.1",
-    "pg": "^8.11.3"
+    "jszip": "^3.10.1",
+    "path": "^0.12.7",
+    "pg": "^8.11.3",
+    "request": "^2.88.2",
+    "superagent": "^8.1.2"
   },
   "devDependencies": {
     "@types/dockerode": "^3.3.19",

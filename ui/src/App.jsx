@@ -30,6 +30,7 @@ export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
   const [response, setResponse] = useState([]);
+  const [user, setUser] = useState('')
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -37,11 +38,9 @@ export function App() {
   async function fetchToken(){
     console.log('fetching token');
     try {
-      console.log('in try block');
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
-      console.log('got result');
-      setToken(`${result}`);
-      console.log('this is the result', result)
+      setToken(`${result}`)
+      console.log('this is the token', result)
     } catch (error) {
       console.log('this is the error', error);
     }
@@ -59,8 +58,23 @@ export function App() {
     /* This is a Work in Progress (WIP) but this button will kick off the Github oAuth flow */
   }
   async function handleButtonClick() {
-    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d');
+    ddClient.host.openExternal('https://github.com/login/oauth/authorize?client_id=32239c9ebb7b81c40e9d&scope=repo');
+
   };
+  async function handleWorkflowLogsClick() {
+    getWorkflowLogs();
+  };
+
+  async function getWorkflowLogs(){
+    try {
+      const result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
+      console.log('got result', result);
+      
+    } catch (error) {
+      console.log('this is the error', error);
+    }
+  }
+  
 
   async function getStatsClick() {
     let newData= [];
@@ -152,17 +166,28 @@ export function App() {
       console.log(await ddClient.docker.listContainers({ all: true }));
       return await ddClient.docker.listContainers({ all: true });
     }
+    
 
     getContainer().then((allContainers) => {
       setContainers(allContainers);
     });
   }, []);
 
+  useEffect(() => {
+    async function getUser() {
+      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
+      console.log(user);
+    }
+    if(authToken !== ''){
+      getUser();
+    }
+  }, [authToken]);
   return (
     <>
       <body className="body">
-        <h1 className="test">Welcome to your dashboard!!!</h1>
+        <h1 className="test">Welcome to your dashboard!!!!</h1>
         <button onClick={handleButtonClick}>Log in through Github</button>
+        <button onClick={handleWorkflowLogsClick}>Get Workflow Logs</button>
         <button onClick={getStatsClick}>Get Docker Stats</button>
         <button onClick={getLogsClick}>Get Docker Logs</button>
         <button onClick={getEventsClick}>Get Docker Events</button>

@@ -13,12 +13,12 @@ fetch(
     .then((token) => {
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
+      process.env.AUTH_TOKEN = authToken;
       return res.status(200).send(authToken)
     });
  }
 )
 
-
-console.log(process.env.REDIRECT_URI);
+// console.log(process.env.REDIRECT_URI);
 
 export default router;
