@@ -1,12 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { BrowserRouter } from 'react-router-dom';
 import { createDockerDesktopClient } from '@docker/extension-api-client';
+import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
+import CssBaseline from '@mui/material/CssBaseline';
+import Button from '@mui/material/Button';
 import { Stack, TextField, Typography } from '@mui/material';
 import './styles.css';
 import Container from './Container';
 import StatusLog from './StatusLog';
 import ContainerHealth from './ContainerHealth';
+import Navbar from './Navbar';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -144,33 +148,37 @@ export function App() {
 
   return (
     <>
-      <div>
-        <body className='body'>
-          <h1 className='test'>Welcome to your dashboard!</h1>
-          <button onClick={githubOAuthButton}>Log in through Github</button>
-          <button onClick={getLogsClick}>Get Docker Logs</button>
-          <button onClick={getEventsClick}>Get Docker Events</button>
-          <div className='box'>
-            <div className='container-grid'>
-              {/*Containers go here*/}
-              {containers.map((container, index) => {
-                return <Container key={index} details={container} />;
-              })}
+      <DockerMuiThemeProvider>
+        <CssBaseline />
+        <div>
+          <body className='body'>
+            <Navbar />
+            <h1 className='test'>Welcome to your dashboard</h1>
+            <button onClick={githubOAuthButton}>Log in through Github</button>
+            <button onClick={getLogsClick}>Get Docker Logs</button>
+            <button onClick={getEventsClick}>Get Docker Events</button>
+            <div className='box'>
+              <div className='container-grid'>
+                {/*Containers go here*/}
+                {containers.map((container, index) => {
+                  return <Container key={index} details={container} />;
+                })}
+              </div>
+
+              <div className='log-grid'>
+                {/*Log goes here*/}
+                {loggedIn && <StatusLog />}
+                <h1>Not logged in!</h1>
+              </div>
             </div>
 
-            <div className='log-grid'>
-              {/*Log goes here*/}
-              {loggedIn && <StatusLog />}
-              <h1>Not logged in!</h1>
+            <div className='container-health'>
+              {/* Container Health Comparison goes here */}
+              <ContainerHealth />
             </div>
-          </div>
-
-          <div className='container-health'>
-            {/* Container Health Comparison goes here */}
-            <ContainerHealth />
-          </div>
-        </body>
-      </div>
+          </body>
+        </div>
+      </DockerMuiThemeProvider>
     </>
   );
 }

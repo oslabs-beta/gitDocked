@@ -53,10 +53,12 @@ export default function Container({ details }) {
       <h5>Block IO: {stats.BlockIO}</h5>
 
       {/* Still have to add functionality for these buttons */}
-      <button className='small-button'>Start</button>
-      <button className='small-button'>Pause</button>
-      <button className='small-button'>Restart</button>
-      <button className='small-button'>Delete</button>
+      <div className='button-wrapper'>
+        <button className='small-button'>Start</button>
+        <button className='small-button'>Pause</button>
+        <button className='small-button'>Restart</button>
+        <button className='small-button'>Delete</button>
+      </div>
     </div>
   );
 }
