@@ -1,17 +1,16 @@
-.test {
-  font-size: xx-large;
+* {
+  color: white;
 }
 
 .body {
-  background-color: rgb(228, 223, 223);
+  background-color: #1c262d;
   height: auto;
   width: auto;
 }
 
 .box {
   display: flex;
-  gap: 50px;
-  padding: 0px 10px 10px 10px;
+  gap: 20px;
 }
 
 .container-grid {
@@ -25,7 +24,7 @@
   grid-column-end: 2;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
-  padding: 20px;
+  padding: 20px 0px 20px 0px;
 }
 
 .container {
@@ -33,19 +32,19 @@
   border-radius: 25px;
   height: 300px;
   width: 300px;
-  background-color: teal;
+  background-color: #228375;
   padding: 15px;
 }
 
 .small-button {
   height: 20px;
-  width: 50px;
-  background-color: light gray;
+  width: 70px;
+  background-color: #516474;
 }
 
 .log-grid {
   border: 10px;
-  background-color: teal;
+  background-color: #7794ab;
   border-radius: 25px;
   display: grid;
   grid-column-start: 0;
@@ -54,14 +53,15 @@
   grid-template-rows: 50px;
 }
 
-h2 {
-
+.button-wrapper {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 button {
   height: 50px;
   width: 150px;
-  background-color: light gray;
+  background-color: #1277db;
 }
 
 .log-list {
@@ -69,7 +69,7 @@ button {
 }
 
 .container-health {
-  background-color: rgb(41, 192, 154);
+  background-color: #228375;
   border-radius: 25px;
   height: auto;
   width: 100%;
@@ -87,4 +87,30 @@ button {
   grid-column-end: 2;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-left: 180px;
+}
+
+img {
+  height: 100px;
+  width: 200px;
+  margin-right: auto;
+}
+
+.nav-grid {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+  width: 100%;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+}
+
+.link {
+  text-decoration: none;
+  color: #1277db;
+  padding: 50px;
+  font-size: larger;
 }

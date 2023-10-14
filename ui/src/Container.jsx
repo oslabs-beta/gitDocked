@@ -27,11 +27,8 @@ export default function Container({ details }) {
 
           // Replace the curly braces with double quotes to make it valid JSON
           const validJsonString = cleanedStdout.replace(/{/g, '{"').replace(/}/g, '"}').replace(/,/g, '","').replace(/:/g, '":"');
-          console.log('validJsonString: ', validJsonString);
-
-          //add curlyy brackets to make valid JSON
+          // add the curly brackets back in
           const addedCurlyBracketsJsonString = ` { "${validJsonString}" }`;
-          
           // Now parse the JSON string into an object
           const parsedObject = JSON.parse(addedCurlyBracketsJsonString);
 
@@ -57,10 +54,12 @@ export default function Container({ details }) {
       <h5>Block IO: {stats.BlockIO}</h5>
 
       {/* Still have to add functionality for these buttons */}
-      <button className='small-button'>Start</button>
-      <button className='small-button'>Pause</button>
-      <button className='small-button'>Restart</button>
-      <button className='small-button'>Delete</button>
+      <div className='button-wrapper'>
+        <button className='small-button'>Start</button>
+        <button className='small-button'>Pause</button>
+        <button className='small-button'>Restart</button>
+        <button className='small-button'>Delete</button>
+      </div>
     </div>
   );
 }
