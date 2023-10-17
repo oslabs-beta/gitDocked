@@ -28,26 +28,15 @@ router.get('/:authtoken', (req, res) => {
   .then((response) => response.arrayBuffer())
   .then((array) => {
     fs.writeFileSync('./downloadedLogs.zip', Buffer.from(array), { flag: 'w' })
-    // Read a zip file
     fs.readFile('./downloadedLogs.zip', (err, data)=> {
-    if (err) throw err;
-    // let zip = new JSZip()
-    // zip.file('./downloadedLogsTwo.zip', data)
-    // zip.generateAsync({ type: 'blob' }).then(binaryData => {
-    // return res.send(binaryData.type)
-  // });
-      JSZip.loadAsync(data).then((zip) => {
-      // Use zip data
-      
-      for(let name in zip.files){
-        let keyArray = Object.keys(zip.files[name]);
-        let arrayBuffer = zip.files[name][keyArray[6]]
-        let chars = Array.from(zip.files[name][keyArray[6]].compressedContent)
-        return res.send('done')
+      if (err) {
+        throw err;
+      } else {
+          JSZip.loadAsync(data).then((zip) => zip.files['1_build_push.txt'].async("text"))
+          .then((txt) => res.send(txt));
       }
-      });
     });
-  })
+  });
 })
 
 

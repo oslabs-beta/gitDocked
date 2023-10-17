@@ -1,20 +1,20 @@
 
 import express from 'express';
-import { Express, Request, Response, NextFunction } from 'express';
+import { Express } from 'express';
 import bodyParser from 'body-parser';
-import gitHubRouter from '../server/routes/gitHubRouter'
+import gitHubRouter from '../server/routes/gitHubRouter';
 import workflowLogs from '../server/routes/workflowLogs'
-import cors from 'cors';
+// import { query } from './models/userModel';
 import userData from '../server/routes/userData'
 
 const app: Express = express();
 
 app.use(bodyParser.json());
-// app.use(cors);
 
+//route for oauth through github
 app.use('/api/github-oauth', (req, res, next) =>{
-    console.log('hitting first route github-oauth')
-    return next();
+  console.log('hitting first route github-oauth');
+  return next();
 }, gitHubRouter);
 
 app.use('/api/workflow-logs', (req, res, next) =>{
