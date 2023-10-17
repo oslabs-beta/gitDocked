@@ -20,8 +20,8 @@ router.get('/:code', (req, res) => {
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
       return query(
-        'INSERT INTO users (authToken, test) VALUES ($1, $2)',
-        [authToken, 'testString']
+        'INSERT INTO users (authToken) VALUES ($1)',
+        [authToken]
       )
         .then(() => {
           console.log('Database INSERT successful');

@@ -13,6 +13,12 @@ export default function Container({ details }) {
   const name = details.Names[0].slice(1);
 
   useEffect(() => {
+    //write initial request to database to pull any previous container information exists
+    //update state with this information
+    //interval every 5 minutes to sync database
+    //this should be done for all containers at the same time.
+
+
     // calls useStats on an interval
     const id = setInterval(() => {
       console.log('THIS IS THE NAME', name);
