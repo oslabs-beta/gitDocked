@@ -27,36 +27,55 @@ export function App() {
   }
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
+  const [response, setResponse] = useState([]);
+  const [user, setUser] = useState('')
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
 
+  /* After receiving the code from the Github login redirect, we will pass the code to our backend API.
+  The backend API will use the code to fetch a token, and set the new token */
   async function fetchToken() {
     console.log('fetching token');
     try {
-      console.log('in try block');
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
       console.log('got result');
       setToken(`${result}`);
-      console.log('this is the result', result);
+      console.log('this is the result', result)
     } catch (error) {
       console.log('this is the error', error);
     }
   }
-
+  /* We will only try to fetch a new token once the user has returned from the Github OAuth redirect */
   if (!loggedIn && code) {
     fetchToken();
     setLoggedIn(true);
-    console.log('this is the code', code);
   }
-
-  // const ddClient = useDockerDesktopClient();
 
   // Users are redirected to an an external page to request
   // their GitHub identity.
   async function githubOAuthButton() {
-    ddClient.host.openExternal(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_CLIENT_ID}`);
+    ddClient.host.openExternal(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_CLIENT_ID}&scope=repo`);
   }
+
+  async function handleWorkflowLogsClick() {
+    if(authToken !== ''){
+      getWorkflowLogs();
+    } else {
+      console.log('You are not logged in yet!');
+    }
+  };
+
+  async function getWorkflowLogs(){
+    try {
+      const result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
+      console.log('got result', result);
+      
+    } catch (error) {
+      console.log('this is the error', error);
+    }
+  }
+  
 
   async function getStatsClick() {
     let newData = [];
@@ -139,12 +158,23 @@ export function App() {
       return await ddClient.docker.listContainers();
     }
 
+    
     // sets the state of containers to only our running containers
     getContainer().then((allContainers) => {
       console.log('all containers', allContainers);
       setContainers(allContainers);
     });
   }, []);
+
+  useEffect(() => {
+    async function getUser() {
+      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
+      setUser(user)
+    }
+    if(authToken !== ''){
+      getUser();
+    }
+  }, [authToken]);
 
   return (
     <>
@@ -153,9 +183,10 @@ export function App() {
         <div>
           <body className='body'>
             <Navbar />
-            <h1 className='test'>Welcome to your dashboard</h1>
+            <h1 className='test'>Welcome to your dashboard {user}!</h1>
             <button onClick={githubOAuthButton}>Log in through Github</button>
             <button onClick={getLogsClick}>Get Docker Logs</button>
+            <button onClick={handleWorkflowLogsClick}>Get Github Action Logs</button>
             <button onClick={getEventsClick}>Get Docker Events</button>
             <div className='box'>
               <div className='container-grid'>
