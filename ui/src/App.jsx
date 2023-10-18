@@ -28,7 +28,7 @@ export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
   const [response, setResponse] = useState([]);
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState('');
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -41,7 +41,7 @@ export function App() {
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
       console.log('got result');
       setToken(`${result}`);
-      console.log('this is the result', result)
+      console.log('this is the result', result);
     } catch (error) {
       console.log('this is the error', error);
     }
@@ -59,23 +59,21 @@ export function App() {
   }
 
   async function handleWorkflowLogsClick() {
-    if(authToken !== ''){
+    if (authToken !== '') {
       getWorkflowLogs();
     } else {
       console.log('You are not logged in yet!');
     }
-  };
+  }
 
-  async function getWorkflowLogs(){
+  async function getWorkflowLogs() {
     try {
       const result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
       console.log('got result', result);
-      
     } catch (error) {
       console.log('this is the error', error);
     }
   }
-  
 
   async function getStatsClick() {
     let newData = [];
@@ -158,7 +156,6 @@ export function App() {
       return await ddClient.docker.listContainers();
     }
 
-    
     // sets the state of containers to only our running containers
     getContainer().then((allContainers) => {
       console.log('all containers', allContainers);
@@ -169,9 +166,9 @@ export function App() {
   useEffect(() => {
     async function getUser() {
       const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
-      setUser(user)
+      setUser(user);
     }
-    if(authToken !== ''){
+    if (authToken !== '') {
       getUser();
     }
   }, [authToken]);
@@ -183,7 +180,7 @@ export function App() {
         <div>
           <body className='body'>
             <Navbar />
-            <h1 className='test'>Welcome to your dashboard {user}!</h1>
+            <h1 className='test'>Welcome to your dashboard, {user}!</h1>
             <button onClick={githubOAuthButton}>Log in through Github</button>
             <button onClick={getLogsClick}>Get Docker Logs</button>
             <button onClick={handleWorkflowLogsClick}>Get Github Action Logs</button>
