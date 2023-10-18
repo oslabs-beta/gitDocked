@@ -9,6 +9,9 @@ const clientSecret: string | undefined = process.env.CLIENT_SECRET;
 
 const router = Router();
 
+/* This route uses the code from the Github login redirect to make a request to Github for a token
+The token is saved to the database under authToken and sent back to the frontend */
+
 router.get('/:code', (req, res) => {
   const code = req.params.code;
   let authToken: string | null;
@@ -17,10 +20,10 @@ router.get('/:code', (req, res) => {
     `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${code}`)
     .then((response) => response.text())
     .then((token) => {
+      /* Github API returns the authToken under the label 'token' */
       const stringParam = new URLSearchParams(token);
-      
       authToken = stringParam.get('access_token');
-      // return res.send(authToken)
+      /* Insert the token into the DB and return to frontend */
       return query(
         'INSERT INTO users (authToken) VALUES ($1)',
         [authToken]

@@ -2,12 +2,12 @@ import { Router } from 'express';
 
 const router = Router();
 
+/* This route uses the authToken to make a RESTful API request to Github and receive the user's profile data */
 router.get('/:authtoken', (req, res) => {
     console.log('Hit user data API')
     
     const token = req.params.authtoken;
     const url = `https://api.github.com/user`;
-    console.log('About to fetch')
     fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -15,6 +15,7 @@ router.get('/:authtoken', (req, res) => {
       }
     })
     .then((response) => response.json())
+    /* After the JSON object promise is resolved, we can access the user's username under the 'login' key */
     .then((text) => res.send(text.login))
 })
 
