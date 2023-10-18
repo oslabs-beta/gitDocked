@@ -2,12 +2,6 @@
   color: white;
 }
 
-.body {
-  background-color: #1c262d;
-  height: auto;
-  width: auto;
-}
-
 .box {
   display: flex;
   gap: 20px;
@@ -18,7 +12,6 @@
   height: auto;
   width: auto;
   border-radius: 25px;
-  /* background-color: aquamarine; */
   display: grid;
   grid-column-start: 0;
   grid-column-end: 2;
