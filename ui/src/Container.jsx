@@ -9,7 +9,7 @@ export default function Container({ details }) {
   const [stats, setStats] = useState({});
 
   // declaring variables for id and name which we will grab from the container object
-  console.log(details);
+  console.log(`details: ${details}`);
   const id = details.Id;
   const name = details.Names[0].slice(1);
 
