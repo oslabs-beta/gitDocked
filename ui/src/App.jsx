@@ -29,6 +29,7 @@ export function App() {
   const [authToken, setToken] = useState('');
   const [response, setResponse] = useState([]);
   const [user, setUser] = useState('')
+  const [avatar_url, setAvatar] = useState('')
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -169,7 +170,8 @@ export function App() {
   useEffect(() => {
     async function getUser() {
       const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
-      setUser(user)
+      setUser(user.login)
+      setAvatar(user.avatar_url)
     }
     if(authToken !== ''){
       getUser();
@@ -182,7 +184,7 @@ export function App() {
         <CssBaseline />
         <div>
           <body className='body'>
-            <Navbar />
+            <Navbar avatar={avatar_url}/>
             <h1 className='test'>Welcome to your dashboard {user}!</h1>
             <button onClick={githubOAuthButton}>Log in through Github</button>
             <button onClick={getLogsClick}>Get Docker Logs</button>
