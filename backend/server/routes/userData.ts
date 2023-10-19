@@ -16,7 +16,7 @@ router.get('/:authtoken', (req, res) => {
     })
     .then((response) => response.json())
     /* After the JSON object promise is resolved, we can access the user's username under the 'login' key */
-    .then((text) => res.send(text.login))
+    .then((userObject) => res.send(userObject))
 })
 
 
