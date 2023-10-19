@@ -2,13 +2,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import StatusLog from './StatusLog';
 
-export default function Navbar() {
+export default function Navbar(props) {
   const navigate = useNavigate();
 
   return (
     <>
       <div className='nav-grid'>
         <img src='https://itsmetommy.com/wp-content/uploads/github-actions-docker-1.png' alt='logo' />
+        <img src={props.avatar} alt='profile pic' />
         <nav className='navbar'>
           <ul className='nav-list'>
             <li>

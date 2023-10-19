@@ -24,7 +24,7 @@ router.get('/:authtoken', (req, res) => {
     return runID.id;
   }).then((id)=> {
     /* Now that we have the ID, we can make a REST API request for the logs */
-      const url = `https://api.github.com/repos/GitDocked-Mock-User-App/To-Do-App/actions/runs/${id}/logs`;
+      const url = `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/actions/runs/${id}/logs`;
       fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,7 +43,25 @@ router.get('/:authtoken', (req, res) => {
             /*JSZip will read the data from the zip file and create a JSZip object containing our txt files.
             We will parse through the txt files to the one we need and send it back to the frontend */
             JSZip.loadAsync(data).then((zip) => zip.files['1_build_push.txt'].async("text"))
-            .then((txt) => res.send(txt));
+            .then((txt) => {
+              let newTxt = txt;
+              let date = ''
+              for(let i = 0; i < newTxt.length; i++){
+                let yearChecker = newTxt.slice(i, i + 4)
+                if(yearChecker === '2023'){
+                  date += newTxt[i];
+                  for(let j = i + 1; j < i + 29; j++){
+                    date += newTxt[j];
+                    if(newTxt[j] === 'Z'){
+                      newTxt = newTxt.replace(`${date}`, '$')
+                      date = ''
+                      break;
+                    }
+                  }
+                }
+              }
+              return res.send(newTxt)
+            });
           }
       });
     });
