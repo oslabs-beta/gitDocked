@@ -1,9 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import StatusLog from './StatusLog';
+import { Routes, Route, Link } from 'react-router-dom';
 
 export default function Navbar(props) {
-  const navigate = useNavigate();
 
   return (
     <>

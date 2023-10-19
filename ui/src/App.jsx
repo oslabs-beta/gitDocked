@@ -11,6 +11,7 @@ import Container from './Container';
 import StatusLog from './StatusLog';
 import ContainerHealth from './ContainerHealth';
 import Navbar from './Navbar';
+import SignInPage from './SignInPage';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -28,8 +29,8 @@ export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
   const [response, setResponse] = useState([]);
-  const [user, setUser] = useState('')
-  const [avatar_url, setAvatar] = useState('')
+  const [user, setUser] = useState('');
+  const [avatar_url, setAvatar] = useState('');
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -167,13 +168,17 @@ export function App() {
   useEffect(() => {
     async function getUser() {
       const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
-      setUser(user.login)
-      setAvatar(user.avatar_url)
+      setUser(user.login);
+      setAvatar(user.avatar_url);
     }
     if (authToken !== '') {
       getUser();
     }
   }, [authToken]);
+
+  if (user === '') {
+    return <SignInPage />;
+  }
 
   return (
     <>
@@ -181,7 +186,7 @@ export function App() {
         <CssBaseline />
         <div>
           <body className='body'>
-            <Navbar avatar={avatar_url}/>
+            <Navbar avatar={avatar_url} />
             <h1 className='test'>Welcome to your dashboard {user}!</h1>
             <button onClick={githubOAuthButton}>Log in through Github</button>
             <button onClick={getLogsClick}>Get Docker Logs</button>
