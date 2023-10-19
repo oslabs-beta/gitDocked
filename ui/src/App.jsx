@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import { createDockerDesktopClient } from '@docker/extension-api-client';
 import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
 import CssBaseline from '@mui/material/CssBaseline';
-import Button from '@mui/material/Button';
-import { Stack, TextField, Typography } from '@mui/material';
 import './styles.css';
-import Dashboard from './Dashboard';
+import SignInPage from './SignInPage';
+import Navbar from './Navbar';
+import Container from './Container';
+import StatusLog from './StatusLog';
+import ContainerHealth from './ContainerHealth';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -23,8 +25,8 @@ export function App() {
   }
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
-  const [response, setResponse] = useState([]);
   const [user, setUser] = useState('');
+  const [userPic, setUserPic] = useState('');
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -69,39 +71,6 @@ export function App() {
     } catch (error) {
       console.log('this is the error', error);
     }
-  }
-
-  async function getStatsClick() {
-    let newData = [];
-
-    const TERMINAL_CLEAR_CODE = '\x1B[2J\x1B[H';
-
-    const result = ddClient.docker.cli.exec('stats', ['--no-trunc', '--format', '{{ json . }}'], {
-      stream: {
-        onOutput(data) {
-          if (data.stdout?.includes(TERMINAL_CLEAR_CODE)) {
-            // This stdout begins with the terminal clear code,
-            // meaning that it is a new sample of data.
-            setResponse(newData);
-            newData = [];
-            newData.push(JSON.parse(data.stdout.replace(TERMINAL_CLEAR_CODE, '')));
-            console.log('included the terminal clear code and data', data);
-          } else {
-            console.log('else block hit', data);
-            newData.push(JSON.parse(data.stdout ?? ''));
-          }
-        },
-        onError(error) {
-          console.error(error);
-          return;
-        },
-        onClose(exitCode) {
-          console.log('docker stats exec exited with code ' + exitCode);
-          return;
-        },
-        splitOutputLines: true,
-      },
-    });
   }
 
   async function getLogsClick() {
@@ -162,7 +131,8 @@ export function App() {
   useEffect(() => {
     async function getUser() {
       const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
-      setUser(user);
+      setUser(user.login);
+      setUserPic(user.avatar_url);
     }
     if (authToken !== '') {
       getUser();
@@ -175,8 +145,9 @@ export function App() {
         <CssBaseline />
         <div>
           <body className='body'>
-            <Navbar />
+            <Navbar userPic={user.avatar_url} />
             <h1 className='test'>Welcome to your dashboard, {user}!</h1>
+            <img src={userPic} alt='pic' />
             <button onClick={githubOAuthButton}>Log in through Github</button>
             <button onClick={getLogsClick}>Get Docker Logs</button>
             <button onClick={handleWorkflowLogsClick}>Get Github Action Logs</button>
