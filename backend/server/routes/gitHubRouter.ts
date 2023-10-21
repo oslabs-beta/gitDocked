@@ -19,6 +19,7 @@ router.get('/:code', (req, res) => {
     .then((token) => {
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
+      console.log(authToken);
       return query(
         'INSERT INTO users (authToken) VALUES ($1)',
         [authToken]

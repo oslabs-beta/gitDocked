@@ -141,7 +141,7 @@ export function App() {
 
     // sets the state of containers to only our running containers
     getContainer().then((allContainers) => {
-      console.log('all containers', allContainers);
+      // console.log('all containers', allContainers);
       setContainers(allContainers);
     });
   }, []);

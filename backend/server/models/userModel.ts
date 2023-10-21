@@ -6,7 +6,7 @@ const pool = new Pool({
   host: "postgresdb",
   port: "5432",
   database: "git_docked_db",
-})
+});
 
 pool.on("connect", () => {
   console.log("connected to the db")
