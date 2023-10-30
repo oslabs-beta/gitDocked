@@ -115,6 +115,14 @@ img {
   display: flex;
 }
 
+.active-link {
+  text-decoration: underline;
+  color: #1277db;
+  padding: 50px;
+  font-size: larger;
+  font-weight: bold;
+}
+
 .link {
   text-decoration: none;
   color: #1277db;

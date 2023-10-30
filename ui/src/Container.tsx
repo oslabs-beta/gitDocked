@@ -54,9 +54,8 @@ export default function Container({ details, onPinToggle }) {
       {/* Still have to add functionality for these buttons */}
       <div className='button-wrapper'>
         <button className='small-button'>Start</button>
-        <button className='small-button'>Pause</button>
-        <button className='small-button'>Restart</button>
-        <button className='small-button'>Delete</button>
+        <button className='small-button'>Stop</button>
+        <button className='small-button'>Remove</button>
       </div>
     </div>
   );

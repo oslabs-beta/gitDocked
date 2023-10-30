@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 
 export default function Navbar(avatar: object) {
 
@@ -11,14 +11,14 @@ export default function Navbar(avatar: object) {
         <nav className='navbar'>
           <ul className='nav-list'>
             <li>
-              <Link to='/' className='link'>
+              <NavLink to='/' className={({ isActive }) => isActive ? 'active-link' : 'link'}>
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to='/charts' className='link'>
+              <NavLink to='/charts' className={({ isActive }) => isActive ? 'active-link' : 'link'}>
                 Charts
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
