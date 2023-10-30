@@ -1,13 +1,13 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
-export default function Navbar(props) {
+export default function Navbar(avatar: object) {
 
   return (
     <>
       <div className='nav-grid'>
         <img src='https://itsmetommy.com/wp-content/uploads/github-actions-docker-1.png' alt='logo' />
-        <img src={props.avatar} alt='profile pic' />
+        <img className='userpic' src={avatar.avatar} alt='profile pic' />
         <nav className='navbar'>
           <ul className='nav-list'>
             <li>

@@ -27,6 +27,7 @@
   width: 300px;
   background-color: #228375;
   padding: 15px;
+  position: relative;
 }
 
 .small-button {
@@ -42,8 +43,15 @@
   display: grid;
   grid-column-start: 0;
   grid-column-end: 1;
-  grid-template-columns: 400px;
+  grid-template-columns: 600px;
   grid-template-rows: 50px;
+  max-height: 600px;
+  padding: 20px;
+}
+
+.log-grid p {
+  overflow: auto;
+  padding: 5px;
 }
 
 .button-wrapper {
@@ -88,6 +96,12 @@ img {
   margin-right: auto;
 }
 
+.userpic {
+  height: 100px;
+  width: 100px;
+  margin-right: 0%;
+}
+
 .nav-grid {
   display: flex;
   align-items: center;
@@ -106,4 +120,23 @@ img {
   color: #1277db;
   padding: 50px;
   font-size: larger;
+}
+
+.pin-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pin {
+  width: 30px;
+  height: 30px;
+  align-self: flex-start;
+  background-color: #aeb9af;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }

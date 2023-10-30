@@ -1,0 +1,145 @@
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { createDockerDesktopClient } from '@docker/extension-api-client';
+import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
+import CssBaseline from '@mui/material/CssBaseline';
+import './styles.css';
+import SignInPage from './SignInPage';
+import Navbar from './Navbar';
+import Container from './Container';
+import StatusLog from './StatusLog';
+import ContainerHealth from './ContainerHealth';
+
+// Note: This line relies on Docker Desktop's presence as a host application.
+// If you're running this React app in a browser, it won't work properly.
+// const client = createDockerDesktopClient();
+
+export function App() {
+  const ddClient = createDockerDesktopClient();
+  {
+    /* Use an array to store our containers initial state is empty */
+  }
+  const [containers, setContainers] = useState([]);
+  {
+    /* Use a boolean to check whether user is logged in or not. This will be used for conditional rendering of components*/
+  }
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authToken, setToken] = useState('');
+  const [logs, setLogs] = useState('');
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const code = queryParams.get('code');
+
+  /* After receiving the code from the Github login redirect, we will pass the code to our backend API.
+  The backend API will use the code to fetch a token, and set the new token */
+  async function fetchToken() {
+    console.log('fetching token');
+    try {
+      const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
+      setToken(`${result}`);
+    } catch (error) {
+      console.log('this is the error', error);
+    }
+  }
+  /* We will only try to fetch a new token once the user has returned from the Github OAuth redirect */
+  if (!loggedIn && code) {
+    fetchToken();
+  }
+
+  async function handleWorkflowLogsClick() {
+    if (localStorage.getItem('authToken')) {
+      getWorkflowLogs();
+    } else {
+      console.log('You are not logged in yet!');
+    }
+  }
+
+  async function getWorkflowLogs() {
+    try {
+      let result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${localStorage.getItem('authToken')}`);
+      console.log('got result', result);
+      result = result.replaceAll('$', '\n');
+      setLogs(result);
+    } catch (error) {
+      console.log('this is the error', error);
+    }
+  }
+
+  // useEffect which will invoke an async function to retrieve all the user's containers and set the state equal to the array of objects
+  // each object will be a container
+  useEffect(() => {
+    // gets the list of running containers
+    async function getContainer() {
+      return await ddClient.docker.listContainers();
+    }
+
+    // sets the state of containers to only our running containers
+    getContainer().then((allContainers) => {
+      console.log('all containers', allContainers);
+      setContainers(allContainers);
+    });
+  }, []);
+
+  useEffect(() => {
+    async function getUser() {
+      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
+      localStorage.setItem('isLoggedIn', true);
+      localStorage.setItem('username', user.login);
+      localStorage.setItem('userpic', user.avatar_url);
+      localStorage.setItem('authToken', authToken);
+    }
+
+    if (authToken !== '') {
+      getUser();
+    }
+  }, [authToken]);
+
+  const handlePinToggle = (index) => {
+    console.log(`pin this container ${index}`);
+    const pinnedContainer = containers[index];
+    const filteredContainers = containers.filter((item, i) => i !== index);
+
+    setContainers([pinnedContainer, ...filteredContainers]);
+  };
+
+  if (!localStorage.getItem('authToken')) {
+    return <SignInPage />;
+  } else if (localStorage.getItem('isLoggedIn')) {
+    return (
+      <>
+        <DockerMuiThemeProvider>
+          <CssBaseline />
+          <div>
+            <div className='body'>
+              <Navbar avatar={localStorage.getItem('userpic')} />
+              <h1 className='test'>Welcome to your dashboard, {localStorage.getItem('username')}!</h1>
+              {/* <button onClick={githubOAuthButton}>Log in through Github</button> */}
+              {/* <button onClick={getLogsClick}>Get Docker Logs</button> */}
+              <button onClick={handleWorkflowLogsClick}>Get Github Action Logs</button>
+              {/* <button onClick={getEventsClick}>Get Docker Events</button> */}
+              <div className='box'>
+                <div className='container-grid'>
+                  {/*Containers go here*/}
+                  {containers.map((container, index) => {
+                    return <Container key={index} details={container} onPinToggle={() => handlePinToggle(index)} />;
+                  })}
+                </div>
+
+                <div className='log-grid'>
+                  {/*Log goes here*/}
+                  {localStorage.getItem('authToken') && <StatusLog />}
+                  <p>{logs}</p>
+                </div>
+              </div>
+
+              <div className='container-health'>
+                {/* Container Health Comparison goes here */}
+                <ContainerHealth />
+              </div>
+            </div>
+          </div>
+        </DockerMuiThemeProvider>
+      </>
+    );
+  }
+}
