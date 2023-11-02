@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "@docker/extension-api-client": "^0.3.4",
+    "chart.js": "^4.4.0",
     "npm": "^10.1.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "react-chartjs-2": "^5.2.0"
   },
   "devDependencies": {
     "@docker/extension-api-client-types": "^0.3.4",
