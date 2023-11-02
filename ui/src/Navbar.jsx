@@ -1,8 +1,9 @@
 import React from 'react';
-import { Routes, Route, Link, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
+import { App } from './App';
+import Charts from './Charts';
 
-export default function Navbar(avatar: object) {
-
+export default function Navbar(avatar) {
   return (
     <>
       <div className='nav-grid'>
@@ -11,12 +12,12 @@ export default function Navbar(avatar: object) {
         <nav className='navbar'>
           <ul className='nav-list'>
             <li>
-              <NavLink to='/' className={({ isActive }) => isActive ? 'active-link' : 'link'}>
+              <NavLink to='/' className={({ isActive }) => (isActive ? 'active-link' : 'link')}>
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink to='/charts' className={({ isActive }) => isActive ? 'active-link' : 'link'}>
+              <NavLink to='/charts' className={({ isActive }) => (isActive ? 'active-link' : 'link')}>
                 Charts
               </NavLink>
             </li>
@@ -25,10 +26,10 @@ export default function Navbar(avatar: object) {
 
         <main>
           {/* <button onClick={() => navigate('/charts')}>Go Charts</button> */}
-          <Routes>
-            <Route path='/'></Route>
-            <Route path='/charts'></Route>
-          </Routes>
+          {/* <Routes>
+            <Route path='/' ></Route>
+            <Route path='/charts' element={<Charts />}></Route>
+          </Routes> */}
         </main>
       </div>
     </>

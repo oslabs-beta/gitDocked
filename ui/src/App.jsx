@@ -9,6 +9,9 @@ import Navbar from './Navbar';
 import Container from './Container';
 import StatusLog from './StatusLog';
 import ContainerHealth from './ContainerHealth';
+import ToggleButton from './ToggleButton';
+import { Routes, Route, NavLink } from 'react-router-dom';
+import Charts from './Charts';
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -102,6 +105,19 @@ export function App() {
     setContainers([pinnedContainer, ...filteredContainers]);
   };
 
+  const handleStartClick = (name) => {
+    const ddClient = createDockerDesktopClient();
+
+    const result = ddClient.docker.cli.exec('start', [name]);
+    result.then((data) => console.log('started container'));
+  };
+  const handleStopClick = (name) => {
+    const ddClient = createDockerDesktopClient();
+
+    const result = ddClient.docker.cli.exec('stop', [name]);
+    result.then((data) => console.log('stopped container'));
+  };
+
   if (!localStorage.getItem('authToken')) {
     return <SignInPage />;
   } else if (localStorage.getItem('isLoggedIn')) {
@@ -115,13 +131,26 @@ export function App() {
               <h1 className='test'>Welcome to your dashboard, {localStorage.getItem('username')}!</h1>
               {/* <button onClick={githubOAuthButton}>Log in through Github</button> */}
               {/* <button onClick={getLogsClick}>Get Docker Logs</button> */}
+              <Routes>
+                <Route path='/'></Route>
+                <Route path='/charts' element={<Charts />}></Route>
+              </Routes>
               <button onClick={handleWorkflowLogsClick}>Get Github Action Logs</button>
+              <ToggleButton />
               {/* <button onClick={getEventsClick}>Get Docker Events</button> */}
               <div className='box'>
                 <div className='container-grid'>
                   {/*Containers go here*/}
                   {containers.map((container, index) => {
-                    return <Container key={index} details={container} onPinToggle={() => handlePinToggle(index)} />;
+                    return (
+                      <Container
+                        key={index}
+                        details={container}
+                        onPinToggle={() => handlePinToggle(index)}
+                        onStartClick={handleStartClick}
+                        onStopClick={handleStopClick}
+                      />
+                    );
                   })}
                 </div>
 

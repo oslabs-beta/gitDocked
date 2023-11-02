@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import useStats from './useStats';
+import { createDockerDesktopClient } from '@docker/extension-api-client';
 
 // this component shows a tile for each of the user's containers
 // this includes active and inactive containers
-export default function Container({ details, onPinToggle }) {
+export default function Container({ details, onPinToggle, onStartClick, onStopClick }) {
   // destructure the details prop which is an object holding information on the container
 
   const [stats, setStats] = useState({});
@@ -43,7 +44,9 @@ export default function Container({ details, onPinToggle }) {
       {/* Invoke slice method on id so that we have the shorter version of the ID which fits inside the size of the component */}
       <div className='pin-button'>
         <h4>Container ID: {id.slice(-10)}</h4>
-        <button className='pin' onClick={onPinToggle}>Pin</button>
+        <button className='pin' onClick={onPinToggle}>
+          Pin
+        </button>
       </div>
       <h5>Container Name: {name}</h5>
       <h5>CPU Percentage: {stats.CPUPerc}</h5>
@@ -53,8 +56,10 @@ export default function Container({ details, onPinToggle }) {
 
       {/* Still have to add functionality for these buttons */}
       <div className='button-wrapper'>
-        <button className='small-button'>Start</button>
-        <button className='small-button'>Stop</button>
+        <button className='small-button' onClick={() => onStartClick(name)}>Start</button>
+        <button className='small-button' onClick={() => onStopClick(name)}>
+          Stop
+        </button>
         <button className='small-button'>Remove</button>
       </div>
     </div>
