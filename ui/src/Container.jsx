@@ -16,9 +16,13 @@ export default function Container({ details, onPinToggle, onStartClick, onStopCl
   useEffect(() => {
     // calls useStats on an interval
     const id = setInterval(() => {
+      // console.log('THIS IS THE NAME', name);
       useStats(name)
         // useStats returns a promise which is thenable
         .then((data) => {
+          // console.log('this is what to show on dashboard', data.stdout);
+          // console.log('this is data', data);
+          // console.log('this is data stdout', data.stdout);
           // remove line breaks
           const cleanedStdout = data.stdout.trim();
 
@@ -28,6 +32,8 @@ export default function Container({ details, onPinToggle, onStartClick, onStopCl
           const addedCurlyBracketsJsonString = ` { "${validJsonString}" }`;
           // Now parse the JSON string into an object
           const parsedObject = JSON.parse(addedCurlyBracketsJsonString);
+
+          // console.log(parsedObject);
           setStats({ ...parsedObject });
         })
         .catch((err) => {

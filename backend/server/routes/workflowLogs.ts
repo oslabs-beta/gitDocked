@@ -18,10 +18,10 @@ router.get('/:authtoken', (req, res) => {
       'X-GitHub-Api-Version': '2022-11-28'
     }
   }).then((response)=> response.json())
-  .then((runs)=> {
-    const runID = runs.workflow_runs[0];
-    return runID.id;
-  }).then((id)=> {
+    .then((runs)=> { 
+      const runID = runs.workflow_runs[0];
+      return runID.id;
+    }).then((id)=> {
     /* Now that we have the ID, we can make a REST API request for the logs */
       const url = `https://api.github.com/repos/GitDocked-Mock-User-App/To-Do-App/actions/runs/${id}/logs`;
       fetch(url, {
@@ -35,36 +35,45 @@ router.get('/:authtoken', (req, res) => {
           /* The data from the API is received as binary data, which we will convert to a Buffer and write to the container */
           fs.writeFileSync('./downloadedLogs.zip', Buffer.from(array), { flag: 'w' });
           /* Now that it is converted to a zip file, we can parse the folder and pull the txt data for the logs */
-          fs.readFile('./downloadedLogs.zip', (err, data) => {
+          fs.readFile('./downloadedLogs.zip', (err, data)=> {
             if (err) {
               throw err;
             } else {
-              /*JSZip will read the data from the zip file and create a JSZip object containing our txt files.
+            /*JSZip will read the data from the zip file and create a JSZip object containing our txt files.
             We will parse through the txt files to the one we need and send it back to the frontend */
-            JSZip.loadAsync(data).then((zip) => zip.files['1_build_push.txt'].async("text"))
-            .then((txt) => {
-              let newTxt = txt;
-              let date = ''
-              for(let i = 0; i < newTxt.length; i++){
-                let yearChecker = newTxt.slice(i, i + 4)
-                if(yearChecker === '2023'){
-                  date += newTxt[i];
-                  for(let j = i + 1; j < i + 29; j++){
-                    date += newTxt[j];
-                    if(newTxt[j] === 'Z'){
-                      newTxt = newTxt.replace(`${date}`, '$')
-                      date = ''
-                      break;
+              JSZip.loadAsync(data).then((zip) => zip.files['1_build_push.txt'].async('text'))
+                .then((txt) => {
+                  let newTxt = txt;
+                  let dateString = '';
+                  for(let i = 0; i < newTxt.length; i++){
+                    const yearChecker = newTxt.slice(i, i + 4);
+                    if(yearChecker === '2023' && newTxt[i + 27] === 'Z'){
+
+                      dateString = newTxt.slice(i, i + 28);
+                      let date = dateString.split('T');
+                      let time = date[1].split('.');
+                      let newDate = date[0] + ' ' + time[0];
+                      // if(newTxt[i+ 29] === '#' && newTxt[i + 32] === 'g'){
+                   
+                      // }
+                      newTxt = newTxt.replace(dateString, newDate);
                     }
                   }
-                }
-              }
-              return res.send(newTxt)
-            });
-          }
-      });
+                  // let txtArray = newTxt.split('\n');
+                  // let txtObj = {...txtArray};
+                  // for(let index in txtObj){
+                  //   if(txtObj[index].includes('##[group]')){
+                  //     break;
+                  //   }
+                  // }
+                  newTxt = newTxt.replaceAll('##[group]', '');
+                  newTxt = newTxt.replaceAll('##[endgroup]', '\n');
+                  return res.send(newTxt);
+                });
+            }
+          });
+        });
     });
-    })
-})
+});
 
 export default router;

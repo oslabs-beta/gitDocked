@@ -40,12 +40,16 @@ export function App() {
     try {
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
       setToken(`${result}`);
+      localStorage.setItem('authToken', authToken);
+      setLoggedIn(true);
     } catch (error) {
       console.log('this is the error', error);
     }
   }
   /* We will only try to fetch a new token once the user has returned from the Github OAuth redirect */
   if (!loggedIn && code) {
+    let newDate = new Date();
+    console.log(newDate);
     fetchToken();
   }
 
@@ -59,10 +63,9 @@ export function App() {
 
   async function getWorkflowLogs() {
     try {
-      let result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${localStorage.getItem('authToken')}`);
-      console.log('got result', result);
-      result = result.replaceAll('$', '\n');
-      setLogs(result);
+      const logs = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
+      console.log(logs);
+      setLogs(logs);
     } catch (error) {
       console.log('this is the error', error);
     }
@@ -85,14 +88,15 @@ export function App() {
 
   useEffect(() => {
     async function getUser() {
-      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
+      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${localStorage.getItem('authToken')}`);
+      setLoggedIn(true);
       localStorage.setItem('isLoggedIn', true);
       localStorage.setItem('username', user.login);
       localStorage.setItem('userpic', user.avatar_url);
-      localStorage.setItem('authToken', authToken);
     }
 
-    if (authToken !== '') {
+    if (localStorage.getItem('authToken') !== '') {
+      setToken(localStorage.getItem('authToken'));
       getUser();
     }
   }, [authToken]);
@@ -157,7 +161,10 @@ export function App() {
                 <div className='log-grid'>
                   {/*Log goes here*/}
                   {localStorage.getItem('authToken') && <StatusLog />}
-                  <p>{logs}</p>
+                  <div className='logs'>
+                    <p>{logs}</p>
+                  </div>
+                  
                 </div>
               </div>
 
