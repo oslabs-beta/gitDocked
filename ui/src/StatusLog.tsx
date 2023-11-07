@@ -1,10 +1,10 @@
-import react from 'react';
+import React from 'react';
 import { useState } from 'react';
 
 export default function StatusLog() {
   const testLogs = ['Pull request initiated', 'Checking mergeability', 'Pushing to DockerHub', 'Deploying to AWS'];
 
-  const [logItem, setLogItem] = useState([``]);
+  const [logItem, setLogItem] = useState(['']);
 
   function handleButtonClick() {
     let index = 0;
