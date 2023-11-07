@@ -2,12 +2,6 @@
   color: white;
 }
 
-.body {
-  background-color: #1c262d;
-  height: auto;
-  width: auto;
-}
-
 .box {
   display: flex;
   gap: 20px;
@@ -18,7 +12,6 @@
   height: auto;
   width: auto;
   border-radius: 25px;
-  /* background-color: aquamarine; */
   display: grid;
   grid-column-start: 0;
   grid-column-end: 2;
@@ -34,6 +27,7 @@
   width: 300px;
   background-color: #228375;
   padding: 15px;
+  position: relative;
 }
 
 .small-button {
@@ -49,8 +43,15 @@
   display: grid;
   grid-column-start: 0;
   grid-column-end: 1;
-  grid-template-columns: 400px;
+  grid-template-columns: 600px;
   grid-template-rows: 50px;
+  max-height: 600px;
+  padding: 20px;
+}
+
+.log-grid p {
+  overflow: auto;
+  padding: 5px;
 }
 
 .button-wrapper {
@@ -95,6 +96,12 @@ img {
   margin-right: auto;
 }
 
+.userpic {
+  height: 100px;
+  width: 100px;
+  margin-right: 0%;
+}
+
 .nav-grid {
   display: flex;
   align-items: center;
@@ -108,9 +115,81 @@ img {
   display: flex;
 }
 
+.active-link {
+  text-decoration: underline;
+  color: #1277db;
+  padding: 50px;
+  font-size: larger;
+  font-weight: bold;
+}
+
 .link {
   text-decoration: none;
   color: #1277db;
   padding: 50px;
   font-size: larger;
+}
+
+.pin-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pin {
+  width: 35px;
+  height: 30px;
+  align-self: flex-start;
+  background-color: #aeb9af;
+  color: white;
+  padding: 5px 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toggle-div {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  margin-right: 81%;
+}
+
+.toggle-btn {
+  background-color: #aeb9af;
+  border: 1px solid #aaa;
+  border-radius: 99px;
+  width: 50px;
+  height: 28px;
+  transition: background-color 0.1s ease, border-color 0.2s ease;
+  cursor: pointer;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.748);
+  position: relative;
+}
+
+.toggle-btn .thumb {
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border-radius: 99px;
+  transform: translateX(0);
+  transition: left 0.15s ease;
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.toggle-btn.toggled {
+  background-color: #15b58e;
+}
+
+/* .toggle-btn:hover {
+  background-color: #6f6f6f;
+} */
+
+.toggle-btn.toggled .thumb {
+  left: calc(50px - 25px);
 }

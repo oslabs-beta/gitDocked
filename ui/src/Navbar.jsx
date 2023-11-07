@@ -1,36 +1,35 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import StatusLog from './StatusLog';
+import { Routes, Route, NavLink } from 'react-router-dom';
+import { App } from './App';
+import Charts from './Charts';
 
-export default function Navbar(props) {
-  const navigate = useNavigate();
-
+export default function Navbar(avatar) {
   return (
     <>
       <div className='nav-grid'>
         <img src='https://itsmetommy.com/wp-content/uploads/github-actions-docker-1.png' alt='logo' />
-        <img src={props.avatar} alt='profile pic' />
+        <img className='userpic' src={avatar.avatar} alt='profile pic' />
         <nav className='navbar'>
           <ul className='nav-list'>
             <li>
-              <Link to='/' className='link'>
+              <NavLink to='/' className={({ isActive }) => (isActive ? 'active-link' : 'link')}>
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to='/charts' className='link'>
+              <NavLink to='/charts' className={({ isActive }) => (isActive ? 'active-link' : 'link')}>
                 Charts
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
 
         <main>
           {/* <button onClick={() => navigate('/charts')}>Go Charts</button> */}
-          <Routes>
-            <Route path='/'></Route>
-            <Route path='/charts'></Route>
-          </Routes>
+          {/* <Routes>
+            <Route path='/' ></Route>
+            <Route path='/charts' element={<Charts />}></Route>
+          </Routes> */}
         </main>
       </div>
     </>

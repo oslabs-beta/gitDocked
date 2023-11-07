@@ -1,6 +1,6 @@
 import { createDockerDesktopClient } from '@docker/extension-api-client';
 
-export default function useStats(name) {
+export default function useStats(name: string) {
   const ddClient = createDockerDesktopClient();
 
   // interacts with command line to get the stats according to the options
