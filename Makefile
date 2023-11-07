@@ -8,12 +8,13 @@ NO_COLOR   = \033[m
 
 build-extension: ## Build service image to be deployed as a desktop extension
 	docker build --tag=$(IMAGE):$(TAG) .
+	docker extension update $(IMAGE):$(TAG)
 
 install-extension: build-extension ## Install the extension
 	docker extension install $(IMAGE):$(TAG)
 
-update-extension: build-extension ## Update the extension
-	docker extension update $(IMAGE):$(TAG)
+# update-extension: build-extension ## Update the extension
+# 	docker extension update $(IMAGE):$(TAG)
 
 prepare-buildx: ## Create buildx builder for multi-arch build, if not exists
 	docker buildx inspect $(BUILDER) || docker buildx create --name=$(BUILDER) --driver=docker-container --driver-opt=network=host

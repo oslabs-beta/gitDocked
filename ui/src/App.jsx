@@ -49,6 +49,8 @@ export function App() {
   }
   /* We will only try to fetch a new token once the user has returned from the Github OAuth redirect */
   if (!loggedIn && code) {
+    let newDate = new Date();
+    console.log(newDate)
     fetchToken();
     setLoggedIn(true);
   }
@@ -69,8 +71,8 @@ export function App() {
 
   async function getWorkflowLogs(){
     try {
-      const result = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
-      console.log('got result', result);
+      const logs = await ddClient.extension.vm?.service?.get(`/api/workflow-logs/${authToken}`);
+      console.log(logs);
       
     } catch (error) {
       console.log('this is the error', error);

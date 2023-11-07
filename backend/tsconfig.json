@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable", "ES6"], // incl ES6 for MUI: https://mui.com/material-ui/guides/typescript/ (DOM was in the Vite TS boilerplate)
+    "lib": ["ES2020", "DOM", "DOM.Iterable", "ES6", "ES2021.String"], // incl ES6 for MUI: https://mui.com/material-ui/guides/typescript/ (DOM was in the Vite TS boilerplate)
     "module": "CommonJS",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
