@@ -101,7 +101,11 @@ img {
   width: 100px;
   margin-right: 0%;
 }
-
+.logs {
+  overflow: auto;
+  padding: 5px;
+  white-space: pre-wrap;
+}
 .nav-grid {
   display: flex;
   align-items: center;

@@ -22,6 +22,7 @@ router.get('/:code', (req, res) => {
       /* Github API returns the authToken under the label 'token' */
       const stringParam = new URLSearchParams(token);
       authToken = stringParam.get('access_token');
+      return res.status(200).send(authToken);
       /* Insert the token into the DB and return to frontend */
       return query('INSERT INTO users (authToken) VALUES ($1)', [authToken])
         .then(() => {

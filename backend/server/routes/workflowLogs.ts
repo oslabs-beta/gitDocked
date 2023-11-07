@@ -59,13 +59,13 @@ router.get('/:authtoken', (req, res) => {
                       newTxt = newTxt.replace(dateString, newDate);
                     }
                   }
-                  let txtArray = newTxt.split('\n');
-                  let txtObj = {...txtArray};
-                  for(let index in txtObj){
-                    if(txtObj[index].includes('##[group]')){
-
-                    };
-                  }
+                  // let txtArray = newTxt.split('\n');
+                  // let txtObj = {...txtArray};
+                  // for(let index in txtObj){
+                  //   if(txtObj[index].includes('##[group]')){
+                  //     break;
+                  //   }
+                  // }
                   newTxt = newTxt.replaceAll('##[group]', '');
                   newTxt = newTxt.replaceAll('##[endgroup]', '\n');
                   return res.send(newTxt);
