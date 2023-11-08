@@ -29,6 +29,8 @@ export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setToken] = useState('');
   const [logs, setLogs] = useState('');
+  const [username, setUsername] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   const queryParams = new URLSearchParams(window.location.search);
   const code = queryParams.get('code');
@@ -39,8 +41,8 @@ export function App() {
     console.log('fetching token');
     try {
       const result = await ddClient.extension.vm?.service?.get(`/api/github-oauth/${code}`);
+      localStorage.setItem('authToken', result);
       setToken(`${result}`);
-      localStorage.setItem('authToken', authToken);
       setLoggedIn(true);
     } catch (error) {
       console.log('this is the error', error);
@@ -88,14 +90,14 @@ export function App() {
 
   useEffect(() => {
     async function getUser() {
-      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${localStorage.getItem('authToken')}`);
+      const user = await ddClient.extension.vm?.service?.get(`/api/user-info/${authToken}`);
+      setUsername(user.login);
+      setAvatar(user.avatar_url);
       setLoggedIn(true);
-      localStorage.setItem('isLoggedIn', true);
-      localStorage.setItem('username', user.login);
-      localStorage.setItem('userpic', user.avatar_url);
+      setToken(localStorage.getItem('authToken'));
     }
 
-    if (localStorage.getItem('authToken') !== '') {
+    if (localStorage.getItem('authToken')) {
       setToken(localStorage.getItem('authToken'));
       getUser();
     }
@@ -122,17 +124,17 @@ export function App() {
     result.then((data) => console.log('stopped container'));
   };
 
-  if (!localStorage.getItem('authToken')) {
+  if (localStorage.getItem('authToken') === null || !localStorage.getItem('authToken')) {
     return <SignInPage />;
-  } else if (localStorage.getItem('isLoggedIn')) {
+  } else {
     return (
       <>
         <DockerMuiThemeProvider>
           <CssBaseline />
           <div>
             <div className='body'>
-              <Navbar avatar={localStorage.getItem('userpic')} />
-              <h1 className='test'>Welcome to your dashboard, {localStorage.getItem('username')}!</h1>
+              <Navbar avatar={avatar} />
+              <h1 className='test'>Welcome to your dashboard, {username}!</h1>
               {/* <button onClick={githubOAuthButton}>Log in through Github</button> */}
               {/* <button onClick={getLogsClick}>Get Docker Logs</button> */}
               <Routes>
@@ -177,5 +179,6 @@ export function App() {
         </DockerMuiThemeProvider>
       </>
     );
+
   }
 }
