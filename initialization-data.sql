@@ -5,6 +5,7 @@ CREATE TABLE users (
 CREATE TABLE containers (
     containerName VARCHAR(255),
     containerID VARCHAR(255) PRIMARY KEY NOT NULL,
+    timestamp TIMESTAMP DEFAULT NOW(),
     numDataPoints INTEGER,
     avgCPUPerc DECIMAL, 
     minCPUPerc DECIMAL,
