@@ -61,7 +61,7 @@ Your Github token and container metrics are stored exclusively in a containerize
 
 Some features the team is implementing in the future include:
 
-- Build containers on your local machine, instead of through Github Actions (cloud), decreasing build time.
+- Build images on your local machine, instead of through Github Actions (cloud), decreasing build time.
 - Display Github Actions as they are processing, giving you live insight as your actions are completed.
 - Add charting to make live container stats easy to digest.
 - Add E2E testing with Jest-puppeteer.
