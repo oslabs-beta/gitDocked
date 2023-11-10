@@ -1,108 +1,83 @@
-# gitDocked
+# Git Docked
 
-This repository defines an example of a Docker extension. The files in this repository have been automatically generated as a result of running `docker extension init`.
+The one-stop Docker Desktop Extension for seamless CI / CD workflow monitoring and container snapshot comparison.
 
-This extension is composed of:
+## Table of Contents
+1. [About](#about)
+2. [How it Works](#how-it-works)
+3. [Getting Started](#getting-started)
+4. [Roadmap](#roadmap)
+5. [Contributors](#contributors)
+6. [License](#license)
 
-- A [frontend](./ui) app in React that makes a request to the `/hello` endpoint and displays the payload in Docker Desktop.
-- A [backend](./backend) container that runs an API in Go. It exposes the `/hello` endpoint which returns a JSON payload.
+## About
 
-> You can build your Docker Extension using your fav tech stack:
->
-> - Frontend: React, Angular, Vue, Svelte, etc.
->   Basically, any frontend framework you can bundle in an `index.html` file with CSS, and JS assets.
-> - Backend (optional): anything that can run in a container.
+Git Docked is a Docker Desktop Extension that hooks into your Github, and provides a simplified GUI to monitor your CI/CD workflow in real time.
 
-<details>
-  <summary>Looking for more templates?</summary>
+## How it Works
+- Docker
+- TypeScript
+- React
+- MUI
+- React Router
+- Vite
+- Node.js
+- Express.js
+- OAuth (Github)
+- PostgreSQL
 
-1. [React + NodeJS](https://github.com/benja-M-1/node-backend-extension).
-2. [React + .NET 6 WebAPI](https://github.com/felipecruz91/dotnet-api-docker-extension).
+Git Docked consists of:
 
-Request one or submit yours [here](https://github.com/docker/extensions-sdk/issues).
+- A frontend UI which allows you to start and stop containers, or remove them from view. Clicking on a container will show you a comparison of the recorded average, min and max statistics associated with the two most recent containers. Additionally, you can check the status of your related Github Actions and watch the new containers update and deploy.
+- A node backend which handles API calls from the frontend UI, and a local PostgreSQL database to store your container's metrics.
+- Open Authorization through Github to pull Github Action data into the app.
 
-</details>
+## Getting Started
 
-## Local development
+### Requirements
 
-You can use `docker` to build, install and push your extension. Also, we provide an opinionated [Makefile](Makefile) that could be convenient for you. There isn't a strong preference of using one over the other, so just use the one you're most comfortable with.
+In order to use Git Docked, you must have Docker Desktop downloaded to your local machine.
 
-To build the extension, use `make build-extension` **or**:
+### Install
 
-```shell
-  docker buildx build -t mccormsy/gitdocked:latest . --load
+Install the extension from Docker Desktop, or build it yourself by forking this repo, navigating to the root folder and running:
+```console
+make build-extension
 ```
 
-To install the extension, use `make install-extension` **or**:
+and then
 
-```shell
-  docker extension install mccormsy/gitdocked:latest
+```console
+make install-extension
 ```
 
-> If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.
+### Logging in to see your Github Actions
 
-To preview the extension in Docker Desktop, open Docker Dashboard once the installation is complete. The left-hand menu displays a new tab with the name of your extension. You can also use `docker extension ls` to see that the extension has been installed successfully.
+Once installed, click login to Github, and click "Get Github Action Logs" to see your most recent pull request.
 
-### Frontend development
+Your Github token and container metrics are stored exclusively in a containerized database right on your own machine, giving you complete control over your data. Git Docked does not externally transmit any of your sensitive data.
 
-During the development of the frontend part, it's helpful to use hot reloading to test your changes without rebuilding your entire extension. To do this, you can configure Docker Desktop to load your UI from a development server.
-Assuming your app runs on the default port, start your UI app and then run:
+## Roadmap
 
-```shell
-  cd ui
-  npm install
-  npm run dev
-```
+Some features the team is implementing in the future include:
 
-This starts a development server that listens on port `3000`.
+- Build containers on your local machine, instead of through Github Actions (cloud), decreasing build time.
+- Display Github Actions as they are processing, giving you live insight as your actions are completed.
+- Add charting to make live container stats easy to digest.
+- Add E2E testing with Jest-puppeteer.
+- Grow the metrics dashboards with additional useful metrics.
+- Add AWS OAuth to enable pulling of container logs from the platform.
 
-You can now tell Docker Desktop to use this as the frontend source. In another terminal run:
+## Contributors
+- Austin Mattus | [Github] (https://github.com/ajmattus) | [Linkedin] (https://www.linkedin.com/in/austinmattus/)
+- David Ortega | [Github] (https://github.com/gitcodedave) | [Linkedin] (https://www.linkedin.com/in/david-ortega-b96094244/)
+- Matthew McCormack | [Github] (https://github.com/mccormsy) | [Linkedin] (https://www.linkedin.com/in/matthewamccormack/)
+- Omid Nasrollahi | [Github] (https://github.com/ajmattus) | [Linkedin] (www.linkedin.com/in/omid-nasrollahi-54b226243)
 
-```shell
-  docker extension dev ui-source mccormsy/gitdocked:latest http://localhost:3000
-```
+## Contributing
 
-In order to open the Chrome Dev Tools for your extension when you click on the extension tab, run:
+We urge developers to utilize Git Docked in their workflow and provide product feedback via Git issues. We encourage potential contributors to start with our Roadmap above. Thank you in advance for your support!
 
-```shell
-  docker extension dev debug mccormsy/gitdocked:latest
-```
+## License
 
-Each subsequent click on the extension tab will also open Chrome Dev Tools. To stop this behaviour, run:
-
-```shell
-  docker extension dev reset mccormsy/gitdocked:latest
-```
-
-### Backend development (optional)
-
-This example defines an API in Go that is deployed as a backend container when the extension is installed. This backend could be implemented in any language, as it runs inside a container. The extension frameworks provides connectivity from the extension UI to a socket that the backend has to connect to on the server side.
-
-Note that an extension doesn't necessarily need a backend container, but in this example we include one for teaching purposes.
-
-Whenever you make changes in the [backend](./backend) source code, you will need to compile them and re-deploy a new version of your backend container.
-Use the `docker extension update` command to remove and re-install the extension automatically:
-
-MAKE SURE TO RE-BUILD YOUR IMAGE FIRST
-```shell
-docker extension update mccormsy/gitdocked:latest
-```
-
-> If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.
-
-> Extension containers are hidden from the Docker Dashboard by default. You can change this in Settings > Extensions > Show Docker Extensions system containers.
-
-### Clean up
-
-To remove the extension:
-
-```shell
-docker extension rm mccormsy/gitdocked:latest
-```
-
-## What's next?
-
-- To learn more about how to build your extension refer to the Extension SDK docs at https://docs.docker.com/desktop/extensions-sdk/.
-- To publish your extension in the Marketplace visit https://www.docker.com/products/extensions/submissions/.
-- To report issues and feedback visit https://github.com/docker/extensions-sdk/issues.
-- To look for other ideas of new extensions, or propose new ideas of extensions you would like to see, visit https://github.com/docker/extension-ideas/discussions.
+This product is licensed under the MIT License without restriction.
