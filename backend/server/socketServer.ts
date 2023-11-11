@@ -18,7 +18,6 @@ app.use('/api/github-oauth', (req, res, next) =>{
 
 //route for updating container data
 app.use('/api/container', (req, res, next) =>{
-  console.log('hitting sockerServer -> containerRouter');
   return next();
 }, containerRouter);
 

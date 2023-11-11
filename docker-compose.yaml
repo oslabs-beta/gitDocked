@@ -11,8 +11,6 @@ services:
     #the /user directory is copied into the extension container in the Dockerfile
       - user:/backend/user
       - /var/run/docker.sock.raw:/var/run/docker.sock
-    # depends_on: 
-    #   - postgresdb
   
   postgresdb:
     image: mccormsy/gitdocked-db:latest
